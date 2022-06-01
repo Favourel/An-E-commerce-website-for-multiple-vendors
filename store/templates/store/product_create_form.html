@@ -1,0 +1,164 @@
+{% extends 'store/base.html' %}
+{% block title %} MyEshop | Create Product {% endblock %}
+
+{% block content %}
+{% include "store/selected_nav.html" %}
+
+{% load crispy_forms_tags %}
+<div class="row">
+    <div class="col-lg-3">
+        <div class="sticky-top" style="top: 70px">
+        <div style="padding: 8px;border-radius: 3px;margin-bottom: 20px;" class="box-element">
+            <div class="col p-8 flex-column">
+                <h3 class="font-weight-light" style="margin-bottom: 2px;">
+                    <a href="javascript:history.go(-1)" class="btn btn-outline-info">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left" fill="currentColor"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                  d="M5.854 4.646a.5.5 0 0 1 0 .708L3.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
+                            <path fill-rule="evenodd"
+                                  d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                        </svg>
+                        back
+                    </a>
+                    Description
+                </h3>
+                <hr>
+                <li>Select from the available Category</li>
+                <li>Product image should be taken under bright light to ensure visibility</li>
+                <li>Ensure you input a detailed description</li>
+                <li>Make price affordable</li>
+                <li>Advertise store link after upload</li>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="col-lg-9">
+        <div style="padding: 10px;border-radius: 3px;margin-bottom: 20px;" class="box-element">
+            <div class="col p-8 flex-column position-static">
+                <!--                        {{ form|crispy }}-->
+                <form id="upload-form" method="POST" action="{% url 'store-create' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h1 class=" mb-4" style="
+                            font-family: vremenagrotesk,sans-serif;
+                            font-weight: 700;
+                            line-height: 1;">Create Product | MyEshop </h1>
+                    <hr>
+                    {{ form.as_p }}
+                    {{ form.media }}
+<!--                    <style>-->
+<!--                        input .clearablefileinput, .form-control-file {-->
+<!--                            background-color: blue;-->
+<!--                        }-->
+<!--                    </style>-->
+<!--                    <style>-->
+<!--                        p {-->
+<!--                                padding-right: 5px;-->
+<!--                                padding-left: 5px;-->
+<!--                                margin-bottom: 1rem;-->
+<!--                                position: relative;-->
+<!--                                width: 100%;-->
+<!--                                padding-right: 15px;-->
+<!--                                padding-left: 15px;-->
+<!--                                display: -ms-flexbox;-->
+
+<!--                         }-->
+<!--                         form {-->
+<!--                         display: flex;-->
+<!--    -ms-flex-wrap: wrap;-->
+<!--    flex-wrap: wrap;-->
+<!--    margin-right: -5px;-->
+<!--    margin-left: -5px;-->
+<!--                         }-->
+<!--                    </style>-->
+<!--                    <div class="form-row">-->
+<!--                        <div class="form-group col-md-6">-->
+<!--                            <label>Product Name</label>-->
+<!--                            {{ form.name }}-->
+<!--                        </div>-->
+<!--                        <div class="form-group col-md-6">-->
+<!--                            <label>Product Category</label>-->
+<!--                            {{ form.category }}-->
+<!--                        </div>-->
+
+<!--                    </div>-->
+<!--                    <div class="form-group">-->
+<!--                            <label>Product Price</label>-->
+<!--                            {{ form.price }}-->
+<!--                        </div>-->
+
+<!--                    <div class="form-group">-->
+<!--                        <label>Product Description</label>-->
+<!--                        {{ form.media }}-->
+<!--                    </div>-->
+<!--                    <label>Product Image1</label>-->
+<!--                    {{ form.image }}-->
+<!--                    <br>-->
+<!--                    <label>Product Image2</label>-->
+<!--                    {{ form.image2 }}-->
+                    <br>
+                    <div class="form-group">
+                        <button id="submit" type="submit" class="btn btn-block mt-2 btn-info">
+                            <div class="spinner-border text-light hide" id="spinner" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <span id="button-text">
+                                Upload Product
+                                <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-cloud-arrow-up"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z"/>
+                                <path fill-rule="evenodd"
+                                      d="M7.646 5.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2z"/>
+                            </svg>
+                            </span>
+                        </button>
+                        <style>
+                        .spinner-border {
+                            width: 1.5rem;
+                            height: 1.5rem;
+                        }
+
+                        </style>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<style>
+    .hide {
+        display: none;
+    }
+
+</style>
+<script>
+    let paymentForm = document.getElementById('upload-form');
+	if (paymentForm) {
+		paymentForm.addEventListener('submit', function () {
+		    console.log("payment button clicked");
+			changeLoadingState(true);
+
+	    }
+	  );
+	}
+
+    var changeLoadingState = function(isLoading) {
+        if (isLoading) {
+            document.getElementById("submit").disabled = true;
+            document.querySelector("#spinner").classList.remove("hide");
+            document.querySelector("#button-text").classList.add("hide");
+        } else {
+            document.getElementById("submit").disabled = false;
+            document.querySelector("#spinner").classList.add("hide");
+            document.querySelector("#button-text").classList.remove("hide");
+        }
+    };
+
+
+
+
+</script>
+{% endblock content %}

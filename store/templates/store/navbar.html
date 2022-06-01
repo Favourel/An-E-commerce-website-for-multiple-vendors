@@ -1,0 +1,546 @@
+{% load static %}
+
+<script type="text/javascript">
+/// some script
+
+// jquery ready start
+$(document).ready(function() {
+	// jQuery code
+
+
+	$("[data-trigger]").on("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        var offcanvas_id =  $(this).attr('data-trigger');
+        $(offcanvas_id).toggleClass("show");
+        $('body').toggleClass("offcanvas-active");
+        $(".screen-overlay").toggleClass("show");
+    });
+
+   	// Close menu when pressing ESC
+    $(document).on('keydown', function(event) {
+        if(event.keyCode === 27) {
+           $(".mobile-offcanvas").removeClass("show");
+           $("body").removeClass("overlay-active");
+        }
+    });
+
+    $(".btn-close, .screen-overlay").click(function(e){
+    	$(".screen-overlay").removeClass("show");
+        $(".mobile-offcanvas").removeClass("show");
+        $("body").removeClass("offcanvas-active");
+
+
+    });
+
+
+}); // jquery end
+
+
+
+
+</script>
+{% load crispy_forms_tags %}
+
+<style type="text/css">
+body.offcanvas-active{
+	overflow:hidden;
+}
+.offcanvas-header{ display:none; }
+.screen-overlay {
+  width:0%;
+  height: 100%;
+  z-index: 30;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity:0;
+  visibility:hidden;
+  background-color: rgba(34, 34, 34, 0.6);
+  transition:opacity .2s linear, visibility .1s, width 1s ease-in;
+   }
+.screen-overlay.show {
+    transition:opacity .5s ease, width 0s;
+    opacity:1;
+    width:100%;
+    visibility:visible;
+}
+
+@media all and (max-width:992px) {
+
+	.offcanvas-header{ display:block; }
+
+	.mobile-offcanvas{
+		visibility: hidden;
+		transform:translateX(-100%);
+	    border-radius:0;
+		display:block;
+	    position: fixed;
+	    top: 0; left:0;
+	    height: 100%;
+	    z-index: 1200;
+	    width:80%;
+	    overflow-y: scroll;
+	    overflow-x: hidden;
+	    transition: visibility .2s ease-in-out, transform .2s ease-in-out;
+	}
+
+	.mobile-offcanvas.show{
+		visibility: visible;
+    	transform: translateX(0);
+	}
+}
+
+
+</style>
+
+<style>
+    /* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+
+body {
+  color: #5a5a5a;
+}
+
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+
+#cart-icon{
+	width:35px;
+	display: inline-block;
+	margin-left: 15px;
+
+}
+
+#cart-ico{
+	width:40px;
+	display: inline-block;
+    display: inline-block;
+    float: left;
+    margin-right: 1px;
+}
+
+.box-elementt{
+	box-shadow:hsl(0, 0%, 80%) 0 0 16px;
+	background-color: #fff;
+	border-radius: 4px;
+	padding: 40px;
+	padding-bottom: 70px;
+}
+
+#cart-icon{
+	width:25px;
+	display: inline-block;
+	margin-left: 1px;
+}
+
+#cart-total{
+	display: block;
+	text-align: center;
+	color:#fff;
+	background-color: red;
+	width: 20px;
+	height: 25px;
+	border-radius: 50%;
+	font-size: 14px;
+}
+.col-lg-6, .col-lg-12, .col-lg-8 {
+	margin-top: 10px;
+}
+.col-6 {
+    padding: 0;
+    padding-bottom: 30px;
+}
+/* new */
+.btn{
+	border-radius: 6;
+}
+
+.row-image{
+	width: 100px;
+}
+
+.form-field{
+	width:250px;
+	display: inline-block;
+	padding: 5px;
+}
+
+.cart-row{
+	display: flex;
+    align-items: flex-stretch;
+}
+
+.quantity{
+	display: inline-block;
+	font-weight: 700;
+	padding-right:10px;
+
+}
+
+.modal-open .modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.modal {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 1050;
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    outline: 0px;
+}
+/* Phone */
+@media only screen and (max-width: 400px) {
+.favour {
+     display: flex;
+    float: left;
+    margin-left: 7.5rem;
+
+}
+}
+@media (min-width: 24em) {
+.favour {
+     display: flex;
+    float: left;
+    margin-left: 20rem;
+
+}
+}
+
+@media (min-width: 48em) {
+    .favour {
+        float: right;
+        margin-left: 200px;
+        margin-top: 1px;
+        margin-right: 2px;
+        visibility: hidden;
+    }
+}
+
+.get {
+    display: flex;
+    margin-left: 1px;
+}
+@media (min-width: 48em) {
+    .get {
+    margin-left: 15px;
+    visibility: hidden;
+    }
+}
+.bg-light {
+    background-color: #f6f9fc!important;
+}
+
+</style>
+<nav class="bg-light navbar navbar-expand-lg navbar-light fixed-top ">
+    <div class="form-inline my-2 my-lg-0">
+        <button style="float: left;" type="button" data-toggle="collapse"
+                data-target="#navbarCollapse"
+                data-trigger="#navbar_main" class="d-lg-none navbar-toggler collapsed"
+                aria-expanded="false">
+            <span class="navbar-toggler-icon"></span>
+            <style>
+                .navbar-toggler-icon {
+                    display: inline-block;
+                    width: 1em;
+                    height: 1em;
+                    vertical-align: middle;
+                    content: "";
+                    background: no-repeat center center;
+                    background-size: 100% 100%;
+                }
+                .navbar-toggler {
+                    padding: .15rem .55rem;
+                    font-size: 1.25rem;
+                    line-height: 1;
+                    background-color: transparent;
+                    border: 1px solid transparent;
+                    border-radius: .25rem;
+                }
+            </style>
+        </button>
+
+        <a href="{% url 'home' %}" class="text-decoration-none">
+            <div class="ml-2 row container shadow flex-column" style="box-shadow: 1px 1px grey;
+                        background-color: #00BFFF;
+                        background-image: linear-gradient(160deg, #80D0C7 10%,  #0093E9 90%);
+                        border-radius: 10px;
+                        width: 40px;
+	                    height: 40px;
+                        padding: 5px;
+                        padding-bottom: 10px;
+                        padding-top: 10px;">
+                <svg style="color: #fff" width="30px" height="30px" viewBox="0 0 16 16" class="bi bi-cart-check-fill"
+                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM4 14a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm7 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm.354-7.646a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
+                </svg>
+                <h3 class="ml-2 mb-2 font-shadow" style="color: black;display: inline-block; font-family:
+                    Lucida Calligraphy;text-shadow: 1px 1px 1px grey;">Elodimuor
+                </h3>
+            </div>
+        </a>
+        <a href="{% url 'cart' %}" class="favour text-decoration-none">
+            <img src="https://img.icons8.com/cute-clipart/25/000000/wish-list.png"/> <span>
+                <p class="badge badge-danger _result">
+                {{ cartItems }}
+                </p>
+            </span>
+        </a>
+        <button data-target="#search" class="btn btn-sm btn-outline-secondary get" data-toggle="modal">
+            <svg data-toggle="modal" width="1em" height="1em" viewBox="0 0 16 16"
+                 data-target="#search" class="bi bi-search" fill="currentColor"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                      d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                <path fill-rule="evenodd"
+                      d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+            </svg>
+        </button>
+    </div>
+
+    <nav id="navbar_main" class="mobile-offcanvas navbar navbar-expand-lg navbar-light bg-light">
+        <div class="offcanvas-header">
+            <button class="btn btn-danger btn-sm btn-close float-right"> &times;</button>
+            <div class="form-inline my-2 my-lg-0">
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="text-decoration-none">
+                    <img width="60px" height="60px" style="object-fit: cover; border-radius: 20px solid #ececec"
+                         class="ml-1 border  rounded-circle account-img" alt="customer pics"
+                         src="{{ request.user.customer_pics.url }}">
+                    <small>{{ request.user.username}}</small>
+                </a>
+                {% else %}
+                <a href="{% url 'home' %}">
+                    <h4 style="display: inline-block;float: left; margin-top: 7px;
+        text-shadow: 2px 1px 1px grey; font-family: Lucida Calligraphy; color: #333; font-size:2rem;">
+                        <strong>Elodimuor</strong>
+                    </h4>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        <hr class="my-3">
+        <div class="d-lg-none">
+            <ul class="navbar-nav">
+                {% if request.user.is_authenticated %}
+                <li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">HOME </a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'about' %}"> ABOUT US </a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'pricing_view' %}"> PRICING </a></li>
+
+                <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">
+                    PROFILE </a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        ALL PRODUCTS
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/{{ user }}/store/#product"> All Category</a>
+                        {% for category in categories %}
+                        <a class="dropdown-item" href="/{{ user }}/store/?category_id={{ category.id }}#product">
+                            {{ category.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </li>
+                <li class="nav-item"><a class="nav-success btn btn-block btn-info" href="{% url 'logout' %}">
+                    LOGOUT </a>
+                </li>
+                {% else %}
+                <li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">HOME </a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'about' %}"> ABOUT
+                    US </a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'pricing_view' %}"> PRICING </a></li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        ALL PRODUCTS
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="../vendors/#product"> All Category</a>
+                        {% for category in categories %}
+                        <a class="dropdown-item" href="../vendors/?category_id={{ category.id }}#product">
+                            {{ category.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </li>
+
+                <li style="margin-bottom: 14px;" class="nav-item"><a class="nav-link" href="{% url 'login' %}"> LOGIN </a></li>
+                <li class="nav-item"><a class="nav-warning btn btn-block btn-info" href="{% url 'register' %}"> SIGNUP </a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <style>
+        @media only screen and (max-width: 1000px) {
+            .hide_nav {
+                display: none;
+            }
+        }
+    </style>
+    <div class="navbar-collapse mr-auto order-lg-2 collapse hide_nav" id="navbarCollapse" style="">
+        <hr class="my-3">
+        <!-- Primary menu-->
+        <ul class="navbar-nav">
+            <form class="form-inline ">
+                <ul class="navbar-nav mr-auto">
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item active">
+                        <a href="{% url 'home' %}" class="nav-link">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'about' %}" class="nav-link">ABOUT</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'profile' %}" class="nav-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1.4em" height="1.4em" fill="currentColor"
+                                 class="bi bi-person" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M10 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                            </svg>
+                            HI,
+                            {% if request.user.first_name %}
+                            {{ request.user.first_name|safe|truncatechars:"7"|upper }}
+                            {% else %}
+                            {{ request.user|safe|truncatechars:"7"|upper }}
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" data-target="#exampleModal"
+                                class="nav-success btn btn-outline-secondary mr-sm-2"
+                                data-toggle="modal">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                 class="bi bi-search" fill="currentColor"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                                <path fill-rule="evenodd"
+                                      d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                            </svg>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-success btn btn-info" href="{% url 'logout' %}">
+                            LOGOUT
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a style="margin-right:10px;float:left;" href="{% url 'cart' %}"
+                           class="text-decoration-none d-flex align-items-center order-lg-3">
+<!--                            <img src="https://img.icons8.com/cute-clipart/38/000000/wish-list.png"/>-->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" fill="currentColor"
+                                 class="bi bi-bag ml-1" viewBox="0 0 16 16" style="color:grey">
+                                <path fill-rule="evenodd"
+                                      d="M8 1a2.5 2.5 0 0 0-2.5 2.5V4h5v-.5A2.5 2.5 0 0 0 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V5H2z"/>
+                            </svg>
+                            <span>
+                                <p class="badge badge-danger _result" style="margin-left: -10px; border-radius: 100%">
+                                {{ cartItems }}
+                                </p>
+                            </span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item active">
+                        <a href="{% url 'home' %}" class="nav-link">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'about' %}" class="nav-link">ABOUT</a>
+                    </li>
+                    <li class="nav-item" style="margin-bottom: 14px;">
+                        <button type="button" data-target="#exampleModal" class="btn btn-outline-secondary mr-sm-2"
+                                data-toggle="modal">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                 class="bi bi-search" fill="currentColor"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                                <path fill-rule="evenodd"
+                                      d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                            </svg>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-success btn btn-info" href="{% url 'register' %}" style="margin-right: 10px;">
+                            SIGNUP
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-success btn btn-info mr-sm-2" href="{% url 'login' %}">
+                            LOGIN
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a style="margin-right:10px;float:left;" href="{% url 'cart' %}"
+                           class="text-decoration-none d-flex align-items-center order-lg-3">
+                            <img src="https://img.icons8.com/cute-clipart/38/000000/wish-list.png"/> <span>
+                                <p class="badge badge-danger">
+                                {{ cartItems }}
+                                </p>
+                            </span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </form>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="modal fade search" id="search" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="container-fluid">
+                    <form class="display-inline my-2 mr-sm-2 my-lg-0" method="GET">
+                        {{ myFilter.form|crispy }}
+                        <button class="btn btn-secondary btn-block" type="submit">SEARCH</button>
+                    </form>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="container-fluid">
+                    <form class="display-inline my-2 mr-sm-2 my-lg-0" method="GET">
+                        {{ myFilter.form|crispy }}
+                        <button class="btn btn-secondary btn-block my-sm-0" type="submit">SEARCH</button>
+                    </form>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>

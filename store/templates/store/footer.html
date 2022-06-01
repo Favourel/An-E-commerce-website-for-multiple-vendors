@@ -1,0 +1,68 @@
+<footer class="bg-dark" style="background-colr: #373f50 !important;color: #fff" id="main-footer">
+    <div class="container justify-content-between py-2 ">
+        <div class="row pt-5 mt-8">
+            <div class="col-md-4 col-sm-6">
+                <h3 class="font-weight-light">Store Categories</h3>
+                {% for category in categories %}
+                <p>{{ category }}</p>
+                {% endfor %}
+            </div>
+            <br>
+            <div class="col-md-4">
+                <h3 class="font-weight-light">Features</h3>
+                <p>Online purchase</p>
+                <p>Swift delivery service</p>
+                <p>Secure payment with Stripe</p>
+                <p>Message through the message box</p>
+            </div>
+            <br>
+            <div class="col-md-4">
+                <div class="widget pb-2">
+                    <h3 class="font-weight-light pb-1">Stay informed</h3>
+                    <form class="needs-validation"
+                          action=""
+                          method="POST" novalidate>
+                        {% csrf_token %}
+                        <div class="input-group input-group-overlay flex-nowrap">
+                            <input class="form-control prepended-form-control" id="validationCustom01" type="email" name="EMAIL"
+                                   placeholder="Your email" required>
+                            <div class="invalid-feedback">
+                                Please provide a valid city.
+                            </div>
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit" name="subscribe">Subscribe</button>
+                            </div>
+                        </div>
+                        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+
+                        <small class="form-text text-light" style="opacity: .6">Subscribe to our newsletter to receive
+                            early
+                            discount offers, updates and new products info.</small>
+                        <div class="subscribe-status"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <ul class="list-inline font-size-sm mb-2 py-4 mb-md-0 order-md-2">
+            <hr style="color: #fff" >
+            <li class="list-inline-item nav-item my-1"><a class="text-decoration-none nav-item" href="about">About</a>
+            </li>
+            <li class="list-inline-item my-1"><a class="text-decoration-none" href="#">Terms &amp; Conditions</a></li>
+            <br>
+        </ul>
+        <p class="font-size-sm mb-0 mr-3 order-md-1">
+            <span class="text-decoration-none">
+            © 2020-MyEshop, Online Store.
+            </span>
+            <a class="text-decoration-none font-weight-normal" href="/"
+               target="_blank" rel="noopener">Favour Elodimuor</a><br><br>
+            <a href="https://www.facebook.com/favour.elodimuor/">
+                <img src="https://img.icons8.com/fluent/48/000000/facebook-new.png"/></a>
+            <a href="https://www.twitter.com/felodimuor/">
+                <img src="https://img.icons8.com/color/48/000000/twitter-squared.png"/></a>
+            <a href="/">
+                <img src="https://img.icons8.com/fluent/48/000000/instagram-new.png"/>
+            </a><br><br>
+        </p>
+    </div>
+</footer>

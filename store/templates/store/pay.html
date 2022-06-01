@@ -1,0 +1,227 @@
+{% extends "store/base.html" %}
+{% block title %}MyEshop | Subscribe{% endblock %}
+
+{% block content %}
+{% load static %}
+{% include 'store/nav.html' %}
+<script src="https://js.stripe.com/v3/"></script>
+
+
+<h3 style="margin-bottom: 2px;">
+    <b>
+    Subscription | MyEshop  </b>
+</h3>
+
+<div class="row ">
+    {% for p in products %}
+    <div class="col-lg-4">
+        <div class="card shadow" style="border-radius: 10px; border:none; ">
+            <style>
+                .card:hover {transform: translateY(-6px);transition: .3s;}
+            </style>
+            <div class="card-body">
+                <h5 class="card-title font-weight-bold">{{p.name}}</h5>
+                <p class="card-text text-muted">
+                    <svg class="bi bi-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                              d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+                    </svg>
+                    {{p.description}}
+                </p>
+
+                {% for plan in p.plan_set.all %}
+                <h5>{{ plan.human_readable_price }}</h5>
+                <div class="text-right">
+                    <input type="checkbox" name="{{p.name}}" value="{{p.id}}"
+                           onclick="planSelect('{{p.name}}' ,'{{plan.human_readable_price}}', '{{plan.id}}')">
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<hr>
+<div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow rounded" style="border-radius:50px;border:none">
+                <div class="p-3">
+                    <h4>Checkout</h4>
+                    <div class="row p-5">
+                        <div class="col-6">
+                            <b>Plan:</b>
+                            <br>
+                            <b>Total:</b>
+                        </div>
+                        <div class="col-6 text-right">
+                            <b id="plan"></b>
+                            <br>
+                            <b id="price"></b>
+                            <p hidden id="priceId"></p>
+                        </div>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary btn-block" id="submitBtn">Subscribe</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+function planSelect(name, price, priceId) {
+		var inputs = document.getElementsByTagName('input');
+
+		for(var i = 0; i<inputs.length; i++){
+			inputs[i].checked = false;
+			if(inputs[i].name== name){
+
+				inputs[i].checked = true;
+			}
+		}
+
+		var n = document.getElementById('plan');
+		var p = document.getElementById('price');
+		var pid = document.getElementById('priceId');
+		n.innerHTML = name;
+		p.innerHTML = price;
+		pid.innerHTML = priceId;
+        document.getElementById("submitBtn").disabled = false;
+	}
+
+
+</script>
+
+
+<script>
+
+// Get Stripe publishable key
+fetch("/config/")
+.then((result) => { return result.json(); })
+.then((data) => {
+  // Initialize Stripe.js
+  const stripe = Stripe(data.publicKey);
+
+  // new
+  // Event handler
+  let submitBtn = document.querySelector("#submitBtn");
+  const paymentParams = {
+          price_id: document.getElementById("priceId").innerHTML,
+      }
+  if (submitBtn !== null) {
+    submitBtn.addEventListener("click", () => {
+
+    // Get Checkout Session ID
+
+    fetch("/create-checkout-session/",
+    	{
+        method: 'POST',
+        headers: {'Content-Type': '/application/json', 'X-CSRFToken': '{{ csrf_token }}' ,},
+        credentials: 'same-origin',
+        body:JSON.stringify({'price_Id': document.getElementById("priceId").innerHTML}),
+        }
+    )
+      .then((result) => { return result.json(); })
+      .then((data) => {
+        console.log(data);
+        // Redirect to Stripe Checkout
+        return stripe.redirectToCheckout({sessionId: data.sessionId})
+      })
+      .then((res) => {
+        console.log(res);
+      });
+    });
+  }
+});
+
+
+
+</script>
+<style>
+.StripeElement {
+    box-sizing: border-box;
+
+    height: 40px;
+
+    padding: 10px 12px;
+
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background-color: white;
+
+    box-shadow: 0 1px 3px 0 #e6ebf1;
+    -webkit-transition: box-shadow 150ms ease;
+    transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus {
+    box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+    border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+    background-color: #fefde5 !important;
+}
+.hidden {
+    display: none;
+}
+
+
+#submit:hover {
+    filter: contrast(120%);
+}
+
+#submit {
+    font-feature-settings: "pnum";
+    --body-color: #f7fafc;
+    --button-color: #556cd6;
+    --accent-color: #556cd6;
+    --gray-border: #e3e8ee;
+    --link-color: #fff;
+    --font-color: #697386;
+    --body-font-family: -apple-system,BlinkMacSystemFont,sans-serif;
+    --radius: 4px;
+    --form-width: 400px;
+    -webkit-box-direction: normal;
+    word-wrap: break-word;
+    box-sizing: border-box;
+    font: inherit;
+    overflow: visible;
+    -webkit-appearance: button;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+    font-size: 16px;
+    padding: 0 12px;
+    line-height: 32px;
+    outline: none;
+    text-decoration: none;
+    text-transform: none;
+    margin-right: 8px;
+    height: 36px;
+    border-radius: var(--radius);
+    color: #fff;
+    border: 0;
+    margin-top: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s ease;
+    display: block;
+    box-shadow: 0 4px 5.5px 0 rgba(0,0,0,.07);
+    width: 100%;
+    background: var(--button-color);
+}
+
+
+
+</style>
+
+{% endblock %}

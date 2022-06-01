@@ -1,0 +1,33 @@
+{% extends 'store/base.html' %}
+{% block title %} MyEshop | {{ object.name }} - Delete {% endblock %}
+
+{% block content %}
+{% include "store/selected_nav.html" %}
+
+<div class="row mt-3">
+    <div class="col-lg-7">
+        <div style="padding:  20px;
+                  border-radius: 3px;
+                  margin-bottom: 20px;"
+             class=" box-element rounded overflow-hidden flex-md-row mb-4  h-md-250 position-relative">
+            <div class="col p-8 d-flex flex-column position-static">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <h3 class="font-weight-light">Delete Product</h3>
+                        <hr>
+                        <h4>Are you sure you want to delete the product <b style="color: #007bff">{{ object.name }}</b></h4>
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-outline-danger" type="submit">Yes</button>
+                        <a class="btn btn-outline-secondary" href="javascript:history.go(-1)">No, Take me
+                            back</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+{% endblock content %}

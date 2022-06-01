@@ -1,0 +1,196 @@
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
+          type="text/css"/>
+</head>
+
+{% load static %}
+<section>
+    <small class="form-text text-muted">Choose a dataset</small>
+        <form action="{% url 'demographics' %}" class="" method="POST">
+            {% csrf_token %}
+            <div class="form-check form-check-inline">
+                <input class="form-check-input dataset" type="radio" name="dataset" id="dataset_a" value="a" checked>
+                <label class="form-check-label" for="dataset_a">
+                    Dataset A
+                </label>
+            </div>
+                <div class="form-check form-check-inline">
+                <input class="form-check-input dataset" type="radio" name="dataset" id="dataset_b" value="b">
+                <label class="form-check-label" for="dataset_b">
+                    Dataset B
+                </label>
+            </div>
+                <div class="form-check form-check-inline">
+                <input class="form-check-input dataset" type="radio" name="dataset" id="both_datasets" value="all">
+                <label class="form-check-label" for="both_datasets">
+                    both datasets
+                </label>
+            </div>
+
+    <small class="form-text text-muted">Choose a label</small>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input dataset" type="radio" name="label" id="positive_class" value="pos">
+            <label class="form-check-label" for="positive_class">
+                positive class
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input dataset" type="radio" name="label" id="negative_class" value="neg">
+            <label class="form-check-label" for="negative_class">
+                negative class
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input dataset" type="radio" name="label" id="both_class" value="all" checked>
+            <label class="form-check-label" for="both_class">
+                both classes
+            </label>
+        </div>
+    </form>
+</section>
+<script>
+    // form dynamic request for charts
+document.body.addEventListener( 'click', function (event) {
+    if( event.target.className === 'form-check-input dataset' ) {
+        const form = event.target.form;
+        const data = new FormData(form);
+
+        const request = new XMLHttpRequest();
+        request.open(form.method, form.action, true);
+        request.send(data);
+    }
+});
+
+// form dynamic request for charts
+document.body.addEventListener( 'click', function (event) {
+    if( event.target.className === 'form-check-input dataset' ) {
+        const form = event.target.form;
+        const data = new FormData(form);
+
+        const request = new XMLHttpRequest();
+        request.open(form.method, form.action, true);
+        request.send(data);
+
+        request.addEventListener("load", function () {
+            if (this.readyState === 4 && this.status === 200) {
+
+                // catch JsonResponse from Django
+                const response = JSON.parse(this.responseText);
+
+                // display message
+                const messages = document.getElementById("messages-list");
+                messages.innerHTML += response.msg;
+                fade_alerts();
+
+                // load content
+                const element = document.getElementById("demographics-content");
+                const section = element.parentNode;
+                section.removeChild(element);
+                section.innerHTML = response.demographics;
+
+                // extract variables for charts
+                const label = response.label;
+                const creation = response.creation;
+
+                creationTime = returnCharts(label, creation);
+                showCharts(creationTime);
+
+            }
+        });
+
+    }
+});
+</script>
+<script>
+    function get_time_config(label, data_labels, data_values) {
+    // configurations for the chart
+    return {
+        type: 'line',
+        data: {
+            labels: data_labels,
+            datasets: [{
+            label: 'counts',
+            data: data_values,
+            backgroundColor: Array(56).fill('rgba(255, 99, 132, 0.5)'),
+            borderColor: Array(data_values.length).fill('rgba(255, 99, 132, 1)'),
+            borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: label + ' tweet creation date'
+            },
+            legend: {
+                display: false,
+                position: 'top',
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            }
+        }
+    }
+}
+
+
+function convertDates(elementCreation) {
+    // convert date object to Year and Month
+    const hatevalTime = [];
+    elementCreation.forEach(function (item, index) {
+        var d = new Date(item);
+        var l = new Date();
+        l.setFullYear(d.getFullYear(), d.getMonth());
+        hatevalTime.push(l);
+    });
+
+    // add counts to occurences of dates
+    var counts = {};
+    for (var i = 0; i < hatevalTime.length; i++) {
+        var num = hatevalTime[i].toISOString().slice(0,7).replace(/-/g,"/");
+        counts[num] = counts[num] ? counts[num] + 1 : 1;
+    }
+
+    // provide correct formatting
+    var dataValues = [];
+    for (var key of Object.keys(counts)) {
+        dataValues.push({'t': key, 'y': counts[key]})
+    }
+
+    return [Object.keys(counts), dataValues]
+}
+
+
+function returnChart(label, creation) {
+    // return the chart
+    const creation_time = document.getElementById('time').getContext('2d');
+    const [creationLabels, creationValues] = convertDates(creation);
+    const creation_time_config = get_time_config(label, creationLabels, creationValues);
+    const creationTime = new Chart(creation_time, creation_time_config);
+
+    return creationTime
+}
+
+
+function showChart(creationTime) {
+    // display the chart
+    window.myLine = creationTime;
+}
+var hatEvalData = document.getElementById("hateval_dataset");
+hatEvalData.click();
+</script>
+<section>
+    <div id="demographics-container">
+        <div id="demographics-content">
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'scripts/index.js' %}"></script>
+<script src="{% static 'scripts/chart.js' %}"></script>

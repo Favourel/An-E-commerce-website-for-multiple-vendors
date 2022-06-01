@@ -1,0 +1,41 @@
+{% extends 'store/base.html' %}
+{% block title %} MyEshop | Pricing {% endblock %}
+{% block content %}
+
+{% include "store/nav.html" %}
+<div class="pricing-header px-3 py-2 pt-md-4 pb-md-3 mx-auto text-center">
+    <h1 class="display-4">Pricing</h1>
+    <p style="font-family: Lato, sans-serif;">Subscribe now to get access in becoming a vendor. With these affordable price plans, owning your store
+        is noe so easy to do.
+    </p>
+</div>
+<div class="row px-3">
+    {% for p in products %}
+    <div class="col-lg-4">
+        <div class="card shadow" style="border-radius: 10px; border:none;border-left: 4px solid #0093E9; ">
+            <div class="card-body">
+                <h5 class="card-title font-weight-bold">{{p.name}}</h5>
+                <p class="card-text text-muted">
+                    <svg class="bi bi-check" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                              d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>
+                    </svg>
+                    {{p.description}}
+                </p>
+                {% for plan in p.plan_set.all %}
+                <h4>{{ plan.human_readable_price }}</h4>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<br>
+<div class="container">
+
+<p style="font-family: Lato, sans-serif;">Choosing a pricing plan can be so easy now. Choose us and start seller to customers. Advertise to your audience to get
+content purchases</p>
+</div>
+{% endblock content %}

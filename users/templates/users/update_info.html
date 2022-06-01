@@ -1,0 +1,503 @@
+{% extends 'store/base.html' %}
+{% block content %}
+{% include "store/nav.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+<div class="row">
+    <div class="col-lg-3 col-xl-3">
+        <div class="sticky-top" style="top: 70px">
+            <div class="card border-0">
+                <a href="{% url 'profile' %}" class="text-decoration-none">
+                    <div align="center" class="customer-profile">
+                        <br>
+                        <img width="120" height="120" background="#777" color="#777"
+                             class="rounded-circle customer-image img-fluid" src="{{ user.customer_pics.url }}">
+                        <h5>Hi, {{ user }}</h5>
+                        <p class="text-truncate">{{ user.email }}</p>
+                    </div>
+                </a>
+                <ul class="customer-nav list-group">
+
+                    <a href="{% url 'user-post' user.username %}"
+                       class="d-flex justify-content-between align-items-center list-group-item">
+                        <span>
+                        <svg style="opacity: 0.7" width="1.5em" height="1.5em" viewBox="0 0 16 16"
+                             class="bi bi-shop mb-1 mr-1"
+                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                  d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zM4 15h3v-5H4v5zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3zm3 0h-2v3h2v-3z"/>
+                        </svg>
+                        My Store
+                        </span>
+                    </a>
+                    <a href="{% url 'update-info' %}"
+                       class="d-flex justify-content-between align-items-center active list-group-item">
+                        <span>
+                            <svg style="opacity: 0.7" width="1.5em" height="1.5em" viewBox="0 0 16 16"
+                                 class="bi bi-pencil-square float-righ mb-1 mr-1"
+                                 fill="currentColor"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd"
+                                          d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                </svg>
+
+                                Update Info
+                        </span>
+                    </a>
+                    <a href="{% url 'customer-orders' %}"
+                       class="d-flex justify-content-between align-items-center list-group-item">
+                        <span>
+                            <svg style="opacity: 0.7" width="1.5em" height="1.5em" viewBox="0 0 16 16"
+                                 class="bi bi-archive mb-1 mr-1"
+                                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1V2zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1v2h14V2zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                            </svg>
+
+                            All Orders
+                        </span>
+                    </a>
+                    {% if request.user.has_paid %}
+                    <a href="{% url 'store-create' %}"
+                       class="d-flex justify-content-between align-items-center list-group-item">
+                        <span>
+                            <svg style="opacity: 0.7" width="1.5em" height="1.5em" viewBox="0 0 16 16"
+                                 class="bi bi-unlock-fill float-righ mb-1 mr-1"
+                                 fill="currentColor"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M.5 9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V9z"/>
+                                <path fill-rule="evenodd"
+                                      d="M8.5 4a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+                            </svg>
+
+                            Become a vendor
+                        </span>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'subscription' %}"
+                       class="d-flex justify-content-between align-items-center list-group-item">
+                        <span>
+                            <svg style="opacity: 0.7" width="1.5em" height="1.5em" viewBox="0 0 16 16"
+                                 class="bi bi-lock-fill float-righ mb-1 mr-1"
+                                 fill="currentColor"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2.5 9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V9z"/>
+                                <path fill-rule="evenodd"
+                                      d="M4.5 4a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+                            </svg>
+
+                            Become a vendor
+                        </span>
+                    </a>
+                    {% endif %}
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9 mb-2 mt-2">
+        <div class="box-element"
+             style="background-image:url('{% static 'images/corner-4.png' %}');background-position: right; border-top-right-radius: .375rem;">
+
+            <div class="media-body p-2">
+                <div class="order-lg-3">
+                    <div class="cart-row">
+                        <h1 style="
+                            font-family: vremenagrotesk,sans-serif;
+                            font-weight: 700;
+                            line-height: 1;">Profile Info
+                        </h1>
+                        <!--                        <h3 class="font-weight-light mt-2" style="margin-bottom: 2px;"> Profile Info</h3>-->
+                        <div style="flex:2">
+                            <div class="form-inline float-right">
+                                <img width="50px" height="50px"
+                                     style="border-radius: 20px solid #ececec;align-items: center;justify-content: center;text-align: center;"
+                                     class="border rounded-circle img-fluid ml-auto"
+                                     alt="customer pics"
+                                     src="{{ user.customer_pics.url }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    .cart-row{
+                        display: flex;
+                        align-items: flex-stretch;
+                        padding-bottom: 10px;
+                        margin-bottom: 10px;
+                        border-bottom: 1px solid #ececec;
+
+                    }
+                </style>
+                <form id="update-form" method="POST" action="{% url 'update-info' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>First Name</label>
+                            {{ u_form.first_name }}
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Username</label>
+                            {{ u_form.username }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        {{ u_form.email }}
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-7">
+                            <label>Location</label>
+                            {{ u_form.location }}
+                        </div>
+                        <div class="form-group col-md-5">
+                            <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+                                    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+                                    crossorigin="anonymous">
+                            </script>
+                            <div class="form-group ">
+                                <label>Phone Number</label>
+                                {{ u_form.phone_number }}
+                            </div>
+
+<!--                            <label>Store Link</label>-->
+<!--                            <div class="input-group flex-nowrap">-->
+<!--                                <input type="text" class="form-control"-->
+<!--                                       value="{{ host }}{% url 'user-post' user.username %}" id="myInput">-->
+<!--                                <button class="btn btn-outline-primary" id="copy-text-func" onclick="myFunction()">-->
+<!--                                    Copy link-->
+<!--                                </button>-->
+<!--                            </div>-->
+                            <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+                            <script>
+                            //$(document).ready(function(){
+                               // $('.store_name').removeAttr("required");​​​​​
+                                //$('#submit').click(function(){
+                                  //$('input').each(function(){
+                                    //$(this).prop('required', !$(this).attr('required'))
+                                  //});
+                                //});
+                            //});
+                            //$('.store_name').removeAttr("required");​​​​​
+                                $('#submit').click(function(){
+                                  $('input').each(function(){
+                                    $(this).prop('required', !$(this).attr('required'))
+                                  });
+                                });
+
+
+                            </script>
+                            <script>
+                                /* Alert the copied text */
+
+                                function myFunction() {
+                                /* Get the text field */
+                                  var copyText = document.getElementById("myInput");
+
+                                  /* Select the text field */
+                                  copyText.select();
+                                  copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+                                  /* Copy the text inside the text field */
+                                  document.execCommand("copy");
+                                }
+
+                                $("#copy-text-func").click(function(e){
+                                    e.preventDefault()
+                                    $('.toast').toast('show');
+                                })
+
+
+
+
+
+                            </script>
+                            <style>
+                                .toast-bottom-left, .toast-bottom-center, .toast-bottom-right {
+                                    bottom: 1.5rem;
+                                }
+                                @media (max-width: 575.98px)
+                                .toast-container {
+                                    padding-right: 1rem;
+                                    padding-left: 1rem;
+                                }
+                                .toast-container {
+                                  position: fixed; /* Stay in place */
+                                  z-index: 2; /* Sit on top */
+                                  padding-top: 80px; /* Location of the box */
+                                  left: 0;
+                                  top: 0;
+                                  width: 100%; /* Full width */
+                                  height: auto; /* Full height */
+
+                                }
+
+                                .toast-top-center .toast, .toast-bottom-center .toast {
+                                    margin-right: auto;
+                                    margin-left: auto;
+                                }
+                                .toast.hide {
+                                    display: none;
+                                }
+                                .fade:not(.show) {
+                                    opacity: 0;
+                                }
+                                .toast {
+                                    display: none;
+                                    opacity: 0;
+                                }
+
+                                .toast {
+                                    max-width: 350px;
+                                    font-size: .875rem;
+                                    background-color: #fff;
+                                    background-clip: padding-box;
+                                    border: 0 solid rgba(0,0,0,0);
+                                    box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.1);
+
+                                    opacity: 0;
+                                    border-radius: .3125rem;
+                                }
+                                .fade {
+                                    transition: opacity 0.15s linear;
+                                }
+                                .text-white {
+                                    color: #fff !important;
+                                }
+                                .bg-success {
+                                    background-color: #42d697 !important;
+                                }
+                                .toast-header {
+                                    display: -ms-flexbox;
+                                    display: flex;
+                                    -ms-flex-align: center;
+                                    align-items: center;
+                                    padding: .25rem .75rem;
+                                    color: #7d879c;
+                                    background-color: rgba(255,255,255,0.85);
+                                    background-clip: padding-box;
+                                    border-bottom: 0 solid rgba(0,0,0,0.05);
+                                }
+                                .toast-header [class*='czi-'] {
+                                    font-size: 1.25em;
+                                }
+
+                                button.close {
+                                    padding: 0;
+                                    background-color: transparent;
+                                    border: 0;
+                                }
+                                .close {
+                                    transition: opacity 0.15s ease-in-out;
+                                    opacity: .7;
+                                }
+
+                                .close {
+                                    float: right;
+                                    font-size: 1.5rem;
+                                    font-weight: 300;
+                                    line-height: 1;
+                                    color: #4b566b;
+                                    text-shadow: none;
+                                    opacity: .5;
+                                }
+                            </style>
+
+                            <div class="toast-container toast-bottom-center" style="height: 10px;">
+                                <div class="toast mb-3 fade " id="cart-toast" data-delay="5000" role="alert"
+                                     aria-live="assertive"
+                                     aria-atomic="true">
+                                    <div class="toast-header bg-secondary shadow text-white">
+                                        <svg width="1.3em" height="1.3em" viewBox="0 0 16 16"
+                                             class="bi bi-check-circle-fill" fill="currentColor"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                        </svg>
+                                        <h6 class="font-size-sm text-white mb-0 ml-2">Store link has been
+                                            copied.</h6>
+                                        <button class="close text-white ml-auto mb-1" type="button"
+                                                data-dismiss="toast"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">×</span></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+                        <label>Image</label>
+                        {{ u_form.customer_pics }}
+                    </div>
+                    <h5 class="text-secondary font-weight-normal">Date Joined - {{ user.date_joined|date }}</h5>
+
+                    <div class="form-group">
+                        <button id="submit" type="submit" class="btn btn-block mt-2 btn-info">
+                            <div class="spinner-border text-light hide" id="spinner" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <span id="button-text">
+                            Update Info?
+                        </span>
+                        </button>
+                        <style>
+                        .spinner-border {
+                            width: 1.5rem;
+                            height: 1.5rem;
+                        }
+
+
+
+                        </style>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<style>
+
+.customer-image {
+    max-width: 10rem;
+    margin-bottom: 1rem;
+    padding: .5rem;
+    background: #fff;
+}
+.rounded-circle {
+    border-radius: 50%!important;
+}
+
+.customer-nav a {
+    text-decoration: none;
+    background-color: transparent;
+}
+.customer-nav a:hover {
+    background-color: #f8f9fa;
+}
+.customer-nav .list-group-item.active {
+    border-color: #dee2e6;
+    background: #dee2e6;
+    color: #212529;
+}
+.list-group-item+.list-group-item.active {
+    margin-top: -1px;
+    border-top-width: 1px;
+}
+.customer-nav .list-group-item {
+    color: #495057;
+    border-color: #e9ecef;
+}
+.list-group-item+.list-group-item {
+    border-top-width: 0;
+}
+.list-group-item.active {
+    color: #fff;
+    background-color: #bcac76;
+    border-color: #bcac76;
+}
+.align-items-center {
+    align-items: center!important;
+}
+.justify-content-between {
+    justify-content: space-between!important;
+}
+.d-flex {
+    display: flex!important;
+}
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: .75rem 1.25rem;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.075);
+}
+
+ul {
+    display: block;
+    list-style-type: disc;
+
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+.customer-profile {
+    padding: 1rem;
+    text-align: center;
+    background: #f8f9fa;
+}
+
+.card {
+    box-shadow: 0 2px 1rem rgba(0,0,0,.15);
+}
+.border-0 {
+    border: 0!important;
+}
+.card {
+    position: relative;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid transparent;
+    border-radius: 5px;
+}
+
+
+</style>
+
+<style>
+    .hide {
+        display: none;
+    }
+
+</style>
+<script>
+    let paymentForm = document.getElementById('update-form');
+	if (paymentForm) {
+		paymentForm.addEventListener('submit', function () {
+		    console.log("payment button clicked");
+			changeLoadingState(true);
+
+	    }
+	  );
+	}
+
+    var changeLoadingState = function(isLoading) {
+        if (isLoading) {
+            document.getElementById("submit").disabled = true;
+            document.getElementsByTagName("input").required = false;
+            document.querySelector("#spinner").classList.remove("hide");
+            document.querySelector("#button-text").classList.add("hide");
+        } else {
+            document.getElementById("submit").disabled = false;
+            document.getElementsByTagName("input").required = false;
+
+            document.querySelector("#spinner").classList.add("hide");
+            document.querySelector("#button-text").classList.remove("hide");
+        }
+    };
+
+
+
+
+
+
+</script>
+
+{% endblock content %}

@@ -1,0 +1,289 @@
+<!doctype html>
+{% load static %}
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <title>
+        MyEshop | Card payment
+    </title>
+
+</head>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
+      type="text/css"/>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"
+        type="text/javascript"></script>
+
+{% include 'store/selected_nav.html' %}
+<script type="text/javascript">
+/// some script
+
+// jquery ready start
+$(document).ready(function() {
+	// jQuery code
+
+
+	$("[data-trigger]").on("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        var offcanvas_id =  $(this).attr('data-trigger');
+        $(offcanvas_id).toggleClass("show");
+        $('body').toggleClass("offcanvas-active");
+        $(".screen-overlay").toggleClass("show");
+    });
+
+   	// Close menu when pressing ESC
+    $(document).on('keydown', function(event) {
+        if(event.keyCode === 27) {
+           $(".mobile-offcanvas").removeClass("show");
+           $("body").removeClass("overlay-active");
+        }
+    });
+
+    $(".btn-close, .screen-overlay").click(function(e){
+    	$(".screen-overlay").removeClass("show");
+        $(".mobile-offcanvas").removeClass("show");
+        $("body").removeClass("offcanvas-active");
+
+
+    });
+
+
+}); // jquery end
+
+
+
+
+
+
+
+</script>
+
+<style type="text/css">
+body.offcanvas-active{
+	overflow:hidden;
+}
+.offcanvas-header{ display:none; }
+.screen-overlay {
+  width:0%;
+  height: 100%;
+  z-index: 30;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity:0;
+  visibility:hidden;
+  background-color: rgba(34, 34, 34, 0.6);
+  transition:opacity .2s linear, visibility .1s, width 1s ease-in;
+   }
+.screen-overlay.show {
+    transition:opacity .5s ease, width 0s;
+    opacity:1;
+    width:100%;
+    visibility:visible;
+}
+
+@media all and (max-width:992px) {
+
+	.offcanvas-header{ display:block; }
+
+	.mobile-offcanvas{
+		visibility: hidden;
+		transform:translateX(-100%);
+	    border-radius:0;
+		display:block;
+	    position: fixed;
+	    top: 0; left:0;
+	    height: 100%;
+	    z-index: 1200;
+	    width:80%;
+	    overflow-y: scroll;
+	    overflow-x: hidden;
+	    transition: visibility .2s ease-in-out, transform .2s ease-in-out;
+	}
+
+	.mobile-offcanvas.show{
+		visibility: visible;
+    	transform: translateX(0);
+	}
+}
+/* Phone */
+@media only screen and (max-width: 600px) {
+.favour {
+    float: left;
+    padding: 1px;
+    margin-right: 3px;
+    margin-left: 64px;
+    visibility: hidden;
+
+}
+}
+@media (min-width: 48em) {
+    .favour {
+        float: left;
+        margin-left: 690px;
+        margin-top: 1px;
+        margin-right: 2px;
+        visibility: hidden;
+    }
+}
+
+.get {
+    display: flex;
+}
+@media (min-width: 48em) {
+    .get {
+    visibility: hidden;
+    }
+}
+body {
+  padding-top: 3rem;
+  padding-bottom: 0rem;
+  color: #5a5a5a;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</style>
+<br>
+<div class="container" align="center">
+    <div class="col-lg-10 mt-4 py-3" align="center">
+        <style>
+            .container {
+                padding: 5px;
+            }
+            .col-lg-10 {
+                padding: 5px;
+            }
+
+        </style>
+        <div class="box-element">
+            <h3 class="font-weight-light mb-4" style="margin-bottom: 2px;">Subscribe with Card </h3>
+            <div class="container">
+                <br><br>
+                <form action="{% url 'card' %}" method="post" id="payment-form">
+                    {% csrf_token %}
+                    <div id="card-element" class="box-element">
+                        <!-- Elements will create input elements here -->
+                    </div>
+                    <!-- We'll put the error messages in this element -->
+                    <div id="card-errors" role="alert"></div>
+                    <input type="hidden" name="payment_intent_id" value="{{ payment_intent_id }}">
+                    <input type="hidden" name="stripe_plan_id" value="{{ stripe_plan_id }}">
+                    <input type="hidden" name="automatic" value="{{ automatic }}">
+
+                    <button id="submit-button" type="submit" class="btn btn-block mt-4 btn-info">
+                        <div class="spinner-border text-light hide" id="spinner" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <span id="button-text">SUBSCRIBE</span>
+                    </button>
+                    <style>
+                        .spinner-border {
+                            width: 1.5rem;
+                            height: 1.5rem;
+                        }
+
+                    </style>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="col-lg-10">
+        <div class="box-element">
+            <div class="cart-row">
+                <div style="flex:3">
+                    <h3 class="font-weight-light mb-2" style="margin-bottom: 2px;align-items: left;
+                        justify-content: center;
+                        text-align: left;
+                        display: flex;
+                        flex-direction: column;">Subscription
+                    </h3>
+                </div>
+            </div>
+            <div class="align-items-center order-lg-3">
+                <div class="cart-row">
+                    <div ><strong>Plan:</strong></div>
+                    <div style="flex:3;" class="float-right mr-auto"><strong>{{ name }}</strong></div>
+                </div>
+            </div>
+            <div class="align-items-center order-lg-3">
+                <div class="cart-row">
+                    <div>
+                        <strong>Price:
+                        </strong>
+                    </div>
+                    <div style="flex:1"><strong>{{ amount }} {{ currency }}/month</strong></div>
+                </div>
+            </div>
+        </div>
+        <br>
+    </div>
+</div>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="{% static 'js/card.js' %}" type="text/javascript"></script>
+<script>
+  card('{{STRIPE_PUBLISHABLE_KEY}}', '{{customer_email}}');
+
+
+</script>
+<style>
+    .hide {
+        display: none;
+    }
+
+
+</style>
+<script>
+    let paymentForm = document.getElementById('payment-form');
+	if (paymentForm) {
+		paymentForm.addEventListener('submit', function () {
+		    console.log("payment button clicked");
+			changeLoadingState(true);
+
+	    }
+	  );
+	}
+
+    var changeLoadingState = function(isLoading) {
+        if (isLoading) {
+            document.getElementById("submit-button").disabled = true;
+            document.querySelector("#spinner").classList.remove("hide");
+            document.querySelector("#button-text").classList.add("hide");
+        } else {
+            document.getElementById("submit-button").disabled = false;
+            document.querySelector("#spinner").classList.add("hide");
+            document.querySelector("#button-text").classList.remove("hide");
+        }
+    };
+
+
+
+</script>
+</html>

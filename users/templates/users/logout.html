@@ -1,0 +1,36 @@
+{% extends 'store/base.html' %}
+{% block content %}
+{% include "store/selected_nav.html" %}
+
+<!--<style>
+    body {
+  background: #cbd5db;
+  color: #333333;
+  margin-top: 5rem;
+}
+</style>-->
+<div role="main">
+    <div class="row" >
+        <div class="col-lg-7">
+            <div style="padding:  20px;
+                  border-radius: 3px;
+                  margin-bottom: 20px;"
+             class="row box-elementt border rounded overflow-hidden flex-md-row mb-4  h-md-250 position-relative">
+            <div class="col p-8 d-flex flex-column position-static">
+                    <h3 class="font-weight-dark mb-2" style="margin-bottom: 2px;">You have been logged out!</h3>
+                    <div class="border-top mt-3">
+                        <small class="lead">Login again?</small>
+                        <br>
+                        <a class="mt-2 btn btn-info btn-block" href="{% url 'login' %}">Login</a>
+                        <br>
+                        <small class="lead">No?</small>
+                        <br>
+                        <a class="mt-2 btn btn-outline-info btn-block" href="{% url 'home' %}">Go to home page</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+{% endblock content %}

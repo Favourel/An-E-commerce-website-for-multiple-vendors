@@ -1,0 +1,1072 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %} MyEshop | {{ user }} Profile{% endblock %}
+{% load humanize %}
+{% load multiply %}
+
+{% load loggedin_users %}
+{% render_logged_in_user_list %}
+
+{% block content %}
+{% include "store/nav.html" %}
+
+<!--<h1 style="-->
+<!--    font-family: vremenagrotesk,sans-serif;-->
+<!--    font-weight: 700;-->
+<!--    line-height: 1;" class="mt-4">Dashboard-->
+<!--</h1>-->
+<br>
+<style>
+    div {scroll-behavior: smooth;}
+
+</style>
+<div class="row mt-3">
+    <div class="col-lg-3 col-xl-3 col-md-3 mb-2">
+        <div class="sticky-top" style="top: 70px">
+            <div class="card border-0">
+                <div align="center" class="customer-profile">
+                    <br>
+                    <img width="120" height="120" background="#777" color="#777"
+                         class="rounded-circle customer-image img-fluid" src="{{ user.customer_pics.url }}">
+                    <h5>Hi, {{ user }}
+                    </h5>
+                    <!--                    {{ user.customer_pics.url|filesizeformat }}-->
+                    <p class="text-truncate">{{ user.email }}</p>
+                </div>
+                <ul class="customer-nav list-group">
+                    <a href="{% url 'user-post' user.username %}"
+                       class="d-flex justify-content-between align-items-center list-group-item">
+                        <span>
+                        <svg style="opacity: 0.7" width="1.5em" height="1.5em" viewBox="0 0 16 16"
+                             class="bi bi-shop mb-1 mr-1"
+                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                  d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zM4 15h3v-5H4v5zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3zm3 0h-2v3h2v-3z"/>
+                        </svg>
+                        My Store
+                        </span>
+                    </a>
+                    <a href="{% url 'update-info' %}"
+                       class="d-flex justify-content-between align-items-center active list-group-item">
+                        <span>
+                            <svg style="opacity: 0.7" width="1.5em" height="1.5em" viewBox="0 0 16 16"
+                                 class="bi bi-pencil-square float-righ mb-1 mr-1"
+                                 fill="currentColor"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd"
+                                          d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                </svg>
+
+                                Update Info
+                        </span>
+                    </a>
+                    <a href="{% url 'update_store' %}"
+                       class="d-flex justify-content-between align-items-center list-group-item">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" style="opacity: 0.7" width="1.5em" height="1.5em"
+                                 fill="currentColor" class="bi bi-nut" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd"
+                                    d="M11.42 2H4.58L1.152 8l3.428 6h6.84l3.428-6-3.428-6zM4.58 1a1 1 0 0 0-.868.504l-3.429 6a1 1 0 0 0 0 .992l3.429 6A1 1 0 0 0 4.58 15h6.84a1 1 0 0 0 .868-.504l3.428-6a1 1 0 0 0 0-.992l-3.428-6A1 1 0 0 0 11.42 1H4.58z"/>
+                              <path fill-rule="evenodd"
+                                    d="M6.848 5.933a2.5 2.5 0 1 0 2.5 4.33 2.5 2.5 0 0 0-2.5-4.33zM5.067 9.848a3.5 3.5 0 1 1 6.062-3.5 3.5 3.5 0 0 1-6.062 3.5z"/>
+                            </svg>
+
+                                Update Store
+                        </span>
+                    </a>
+                    <!--                    <a href="{% url 'customer-orders' %}"-->
+                    <!--                       class="d-flex justify-content-between align-items-center list-group-item">-->
+                    <!--                        <span>-->
+                    <!--                            <svg style="opacity: 0.7" width="1.5em" height="1.5em" viewBox="0 0 16 16"-->
+                    <!--                                 class="bi bi-archive mb-1 mr-1"-->
+                    <!--                                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">-->
+                    <!--                                <path fill-rule="evenodd"-->
+                    <!--                                      d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1V2zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1v2h14V2zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>-->
+                    <!--                            </svg>-->
+
+                    <!--                            All Orders-->
+                    <!--                        </span>-->
+                    <!--                    </a>-->
+                    {% if request.user.vendor %}
+                    {% if request.user.has_paid %}
+                    <a href="{% url 'store-create' %}"
+                       class="d-flex justify-content-between align-items-center list-group-item">
+                            <span>
+                                <svg style="opacity: 0.7" width="1.5em" height="1.5em" viewBox="0 0 16 16"
+                                     class="bi bi-unlock-fill float-righ mb-1 mr-1"
+                                     fill="currentColor"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M.5 9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V9z"/>
+                                    <path fill-rule="evenodd"
+                                          d="M8.5 4a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+                                </svg>
+
+                                Become a vendor
+                            </span>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'subscription' %}"
+                       class="d-flex justify-content-between align-items-center list-group-item">
+                            <span>
+                                <svg style="opacity: 0.7" width="1.5em" height="1.5em" viewBox="0 0 16 16"
+                                     class="bi bi-lock-fill float-righ mb-1 mr-1"
+                                     fill="currentColor"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2.5 9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V9z"/>
+                                    <path fill-rule="evenodd"
+                                          d="M4.5 4a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+                                </svg>
+
+                                Become a vendor
+                            </span>
+                    </a>
+                    {% endif %}
+                    {% else %}
+                    <a href="{% url 'create_store' %}"
+                       class="d-flex justify-content-between align-items-center list-group-item">
+                            <span>
+                                <svg style="opacity: 0.7" width="1.5em" height="1.5em" viewBox="0 0 16 16"
+                                     class="bi bi-lock-fill float-righ mb-1 mr-1"
+                                     fill="currentColor"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2.5 9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V9z"/>
+                                    <path fill-rule="evenodd"
+                                          d="M4.5 4a3.5 3.5 0 1 1 7 0v3h-1V4a2.5 2.5 0 0 0-5 0v3h-1V4z"/>
+                                </svg>
+                                Become a vendor
+                            </span>
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'customer-product-list' %}"
+                       class="d-flex justify-content-between align-items-center list-group-item">
+                        <span>
+                        <svg style="opacity: 0.7" width="1.5em" height="1.5em" viewBox="0 0 16 16"
+                             class="bi bi-archive mb-1 mr-1"
+                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1V2zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1v2h14V2zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                            </svg>
+                        Customer Orders
+                        </span>
+                    </a>
+                </ul>
+            </div>
+        </div>
+        <br>
+    </div>
+
+    <div class="col-lg-9 col-md-9">
+        {% if request.user.vendor %}
+        {% if products|length > 1 %}
+        <div class="box-element text-light mb-4 bg-gradient rounded">
+            <style>
+                .bg-gradient {
+                    background-imae: -o-linear-gradient(135deg,#014ba7,#0183d0);
+                    background-imag: linear-gradient(-45deg,#014ba7,#0183d0);
+                    background-color: #152e4d;
+                    background-position: center;
+                    font-color: white;
+                    text-color: '#fff';
+                }
+
+
+            </style>
+            <h4 style="margin-bottom: .5rem;
+                font-family: vremenagrotesk,sans-serif;
+                font-weight: 900;
+                line-height: 1.3;color: #fff">Product Sales</h4>
+            <hr>
+            <canvas class="my-2 w-100 p-2 rounded" id="myChart" width="900" height="250"
+                    style="font-color: white;text-color: #fff;">
+            </canvas>
+            <div class="text-center" align="center">
+                Product Id
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+
+        <div class="row mt-1">
+            <div class="col-lg-3 col-md-3 mb-2">
+                <div class="box-element "
+                     style="background-image:url('{% static 'images/corner-1.png' %}');background-position: right; border-top-right-radius: .375rem;">
+
+                    <h6>Total Products</h6>
+                    <div class="order-row ">
+                        <h1 class="text-truncate" style="align-items: left;text-align: left;display: flex;
+                            flex-direction: column;color: #f5803e!important;">
+                            {% if request.user.vendor %}
+                            {{ total_product|intword }}
+                            {% else %}
+                            0
+                            {% endif %}
+                        </h1>
+                        <!--                        <svg style="color: #f5803e!important;" xmlns="http://www.w3.org/2000/svg" width="1.7rem"-->
+                        <!--                             height="1.7rem" fill="currentColor"-->
+                        <!--                             class="bi bi-box-seam ml-auto mt-3" viewBox="0 0 16 16">-->
+                        <!--                            <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>-->
+                        <!--                        </svg>-->
+                    </div>
+                    <style>
+                        .badge-soft-warning {
+                            color: #c46632;
+                            background-color: #fde6d8;
+                        }
+                        .rounded-capsule {
+                            border-radius: 3.125rem!important;
+                        }
+
+
+                    </style>
+                    <div class="badge badge-soft-warning rounded-capsule">
+                        <a href="{% url 'store-create' %}" style="color: #c46632; text-decoration: none;">
+                            add more >
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 mb-2">
+                <div class="box-element"
+                     style="background-image:url('{% static 'images/corner-4.png' %}');background-position: right; border-top-right-radius: .375rem;">
+                    <h6>Total Orders</h6>
+                    <div class="order-row ">
+                        <h1 class="text-truncate text-info" style="align-items: left;justify-content: center;text-align: left;display: flex;
+                    flex-direction: column;">{{ total_order|intword }}</h1>
+                        <!--                        <svg style="color: #17a2b8!important;" width="1.7rem" height="1.7rem" viewBox="0 0 16 16"-->
+                        <!--                             class="bi bi-archive ml-auto mt-3"-->
+                        <!--                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">-->
+                        <!--                            <path fill-rule="evenodd"-->
+                        <!--                                  d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1V2zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1v2h14V2zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>-->
+                        <!--                        </svg>-->
+                    </div>
+                    <div class="badge badge-info rounded-capsule">
+                        <a href="{% url 'customer-orders' %}" style="color: #fff; text-decoration: none;">show more
+                            ></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 mb-2" style="bottom: .76rem">
+                <div class="box-element"
+                     style="background-image:url('{% static 'images/corner-2.png' %}');background-position: right; border-top-right-radius: .375rem;">
+                    <h6>Subscription</h6>
+                    <p>Plan -
+                        {% if user_plan %}
+                        {% for plan in user_plan %}
+                        {{plan.product }}
+                        {% endfor %}
+                        {% else %}
+                        No paid plan
+                        {% endif %}
+                    </p>
+                    <div class="row container">
+                        <div>Paid -
+                            {% if user.has_paid %}
+                            <div class="badge badge-success pt-2 pb-2 ">
+                                {{ user.has_paid }}
+                            </div>
+                            {% else %}
+                            <div class="badge badge-danger pt-2 pb-2">
+                                {{ user.has_paid }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <p class="badge badge-secondary ml-2 rounded-capsule text-light pb-2 pt-2 pr-2 pl-2 rounded">
+                            cancel on {{ user.paid_until }}
+                        </p>
+                    </div>
+                    <!--                    <a href="/cancel/">cancel</a>-->
+                </div>
+            </div>
+        </div>
+
+        <div id="orders" class="row">
+            <div class="col-lg-6" style="overflow: auto">
+                <div class="box-element">
+
+                    <div class="order-row">
+                        <a href="{% url 'user_follower_view' %}" class="user-follower text-decoration-none">
+                            <h3 class="user-follower"><b>{{ user_followers_list_count }} - Followers</b></h3>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            <style>
+                .card__ {
+                    overflow-y: auto;
+                    max-height: calc(70% + 7rem);
+                }
+                .card__{
+                    word-wrap: break-word;
+                    display: -webkit-flex;
+                    display: flex;
+                    -webkit-flex-direction: column;
+                    flex-direction: column;
+                    }
+
+
+            </style>
+
+            <div class="col-lg-6" style="overflow: auto">
+                <div class="card_ box-element">
+
+                    <div class="order-row">
+                        <a href="{% url 'user_follower_view' %}" class="user-follower text-decoration-none">
+                            <h3 class="user-follower"><b>{{ user_following_count }} - Following</b></h3>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <br>
+<!--        {% if orders|length == 0 %}-->
+<!--        <div class="box-element">-->
+<!--            <div class="order-row">-->
+<!--                <h3 class="display-4" style="align-items: center;-->
+<!--                        justify-content: center;-->
+<!--                        text-align: center;-->
+<!--                        display: flex;-->
+<!--                        flex-direction: column;">No order has been made!</h3>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <br>-->
+<!--        {% endif %}-->
+        <style>
+            .order-row{
+                display: flex;
+                align-items: flex-stretch;
+
+            }
+            .chartjs-render-monitor {font-color:#fff;}
+
+            .user-follower:hover {
+                color: #007bff !important;
+            }
+
+
+        </style>
+        <div class="align-items-center order-lg-3">
+            <div class="row gutter-3">
+                <div class="col-12">
+                    {% if orders|length > 0 %}
+                    <div class="cart-item mb-4 box-element cart-item-sm">
+                        <div class="order-row">
+                            <h4><b>My Orders</b></h4>
+                            <div style="flex:2">
+                                <div class="form-inline float-right mt-1">
+                                    {% if orders.has_other_pages %}
+                                    {% if orders.has_previous %}
+                                    <!--                            <a class="btn-sm btn btn-outline-info mb-7" href="?page=1">&laquo; First Page</a>-->
+                                    <a class="btn-sm btn btn-outline-info mb-7" style="box-shadow: 4px 6px 5px grey;"
+                                       href="?page={{ orders.previous_page_number }}#orders">
+                                        PREVIOUS
+                                    </a>
+                                    {% endif %}
+                                    {% if orders.has_next %}
+                                    <a style="box-shadow: 4px 6px 5px grey;"
+                                       class="btn-sm ml-2 btn btn-outline-info mb-7"
+                                       href="?page={{ orders.next_page_number }}#orders">NEXT
+                                    </a>
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        {% for item in orders %}
+                        <div class="row align-items-center">
+                            <div class="col-lg-9">
+                                <div class="media media-product">
+                                    <a href="{% url 'store-detail' item.product.id %}">
+                                        <img src="{{ item.product.imageURL }}" class="mb-2" width="60px" height="60px"
+                                             alt="Image">
+                                    </a>
+                                    <div class="media-body ml-2">
+                                        <h5 class="media-title">{{ item.product.name }}</h5>
+                                        <b class="media-title text-lg-right">
+                                            ₦{{item.product.price|floatformat:2 }}
+                                        </b><br>
+                                        <b>Qty- {{ item.quantity }}</b>
+                                        <br>
+                                        <span class="media-subtitle text-muted">
+                                            Date - on {{ item.date_added }} + 01:00
+                                        </span>
+                                        <!--                                        <hr class="my-2">-->
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-2 text-right line border-left text-lg-right">
+                                <b>Subtotal: </b>
+                                <b class="cart-item-price">₦{{ item.get_total }}</b>
+                                <hr class="my-2 d-lg-none">
+                                {% if item.order.complete %}
+                                <b><span class="badge badge-success">Completed</span></b>
+                                {% else %}
+                                <b><span class="badge badge-warning">Order incomplete</span></b>
+                                {% endif %}
+                            </div>
+
+                            <!--                            <div class="col-lg-2 text-center line text-lg-center">-->
+                            <!--                                {% if item.order.complete %}-->
+                            <!--                                <b><span class="badge badge-success">Completed</span></b>-->
+                            <!--                                {% else %}-->
+                            <!--                                <b><span class="badge badge-warning">Order incomplete</span></b>-->
+                            <!--                                {% endif %}-->
+                            <!--                            </div>-->
+                        </div>
+                        <hr>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if request.user.vendor %}
+        {% if best_selling_products|length > 0 %}
+
+        <div class="box-element" style="overflow:auto;">
+            <h4><b>Best Selling Product</b></h4>
+            <table class="table table-hover">
+                <thead style="background-color: #f8f9fa;">
+                <tr>
+                    <!--                            <th>S.N.</th>-->
+                    <th>PRODUCT</th>
+                    <th></th>
+                    <th>UPLOADED</th>
+                    <th>PRICE</th>
+                    <th>SALES</th>
+                    <th>PURCHASE</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for p in best_selling_products %}
+                <tr>
+                    <!--                            <td>-->
+                    <!--                                {{ forloop.counter }}-->
+                    <!--                            </td>-->
+
+                    <td><img src="{{ p.image.url }}" width="60px" height="60px" alt=""></td>
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.date }} + 01:00</td>
+                    <td>₦{{ p.price }}</td>
+                    <td>₦{{ p.price|multiply:p.order_count }}</td>
+                    <td>{{ p.order_count }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+        {% endif %}
+
+        <!--        <div class="card mb-3">-->
+        <!--            <div class="card-body">-->
+        <!--                <div id="container" style="width: 100%;">-->
+        <!--                    <canvas id="pie-chart"></canvas>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+
+        <!--        {{ DOW_CHOICES|safe }}-->
+        <!--        {% for follower in notify_orders %}-->
+        <!--        {{ follower }}-->
+        <!--        {% endfor %}-->
+
+
+        <!--        {% if request.user.is_superuser %}-->
+        <!--        {% if logged_user %}-->
+        <!--        <ul class="user-list">-->
+        <!--            {% for user in logged_user %}-->
+        <!--            <li>{{ user }}</li>-->
+        <!--            {% endfor %}-->
+        <!--        </ul>-->
+        <!--        {% endif %}-->
+        <!--        <br>-->
+        <!--        <br>-->
+        <!--        {% for user in users_list %}-->
+        <!--        <li>{{ user }}</li>-->
+        <!--            {% if user in online_list %}-->
+        <!--            online-->
+        <!--            {% else %}-->
+        <!--            offline-->
+        <!--            {% endif %}-->
+        <!--        {% endfor %}-->
+        <!--        {% endif %}-->
+        <!--        <br>-->
+        <!--{{ loogedin_list }}-->
+
+        <style>
+
+            . hide-follow {display:none}
+
+            #thumb {
+                width: 100%;
+                height: 200px;
+                -webkit-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+                -moz-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+                box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+            }
+            .arrow{
+                width: 15px;
+                height: 15px;
+                cursor: pointer;
+                transition: .3s;
+            }
+
+            .arrow:hover{
+                opacity: .5;
+                width: 20px;
+                height: 20px;
+            }
+
+
+
+
+        </style>
+
+
+        <script>
+
+        var config = {
+          type: 'bar',
+          data: {
+            datasets: [{
+              data:
+              [
+              {% if request.user.vendor %}
+              {% for product in products %}
+              {{product.orderitem_set.count}},
+              {% endfor %}
+              {% endif %}
+            ],
+              backgroundColor: [
+                '#00FFFF', 'pink', 'blue', 'yellow', '#D3D3D3', 'orange', 'purple',
+              ],
+              label: 'Sales'
+            }],
+            labels:
+            //{{ DOW_CHOICES|safe }}
+            ['Mon',
+            'Mon',
+            'Mon',
+            'Tue',
+            'Tue',
+            'Tue',
+            'Tue',
+            'Tue',
+            'Mon',
+            'Mon',]
+          },
+
+          options: {
+            responsive: true,
+            legend: {
+            display: false
+          },
+          }
+        };
+
+        window.onload = function() {
+          var ctx = document.getElementById('pie-chart').getContext('2d');
+          window.myPie = new Chart(ctx, config);
+        };
+
+
+
+
+        </script>
+        <script>
+            var config = {
+              type: 'bar',
+              data: {
+                datasets: [{
+                  data:
+                  [
+                  {% if request.user.vendor %}
+                  {% for product in products %}
+                  {{product.orderitem_set.count}},
+                  {% endfor %}
+                  {% endif %}
+
+                ],
+                  backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+                borderColor: '#333',
+                borderWidth: 4,
+                fontColor: 'red',
+                pointBackgroundColor: '#00FFFF',
+                  label: 'Sales'
+                }],
+                labels: {{ DOW_CHOICES|safe }}
+              },
+              options: {
+                responsive: true
+              }
+            };
+
+            window.onload = function() {
+              var ctx = document.getElementById('pie-chart').getContext('2d');
+              window.myPie = new Chart(ctx, config);
+            };
+
+
+
+        </script>
+    </div>
+</div>
+<br>
+{% if vendor_following_products|length > 0 %}
+<div id="content-wrapper" class="box-element">
+
+    <div class="order-row">
+        <h4 class="d-flex"><b>Vendors you follow</b></h4>
+        <div style="flex:2">
+            <div class="form-inline float-right mt-1">
+                <a href="{% url 'user_followers_product' %}" class="btn btn-outline-info btn-sm mb-2">See all</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="column">
+        <div id="slide-wrapper">
+            <!--                <img id="slideLeft" class="arrow hide" src="{% static 'images/arrow-up.png' %}">-->
+            <div id="slider">
+                {% for query in vendor_following_products %}
+                <div class="col-lg-2 col-md-4 col-sm-4 col-8">
+                    <style>
+                        .col-6 {
+                            padding: 10px;
+                        }
+                    </style>
+                    <a href="{% url 'store-detail' query.id %}" class="text-decoration-none" style="color: black;">
+                        <img src="{{ query.image.url }}"
+                             alt="{{ query.name }} with quality amazing HD picture" id="thumb">
+                        <div class="mt-1">
+                            <h6 style="font-size: 15px" class="text-truncate">
+                                {{ query.name|safe|truncatewords:"4"|linebreaks }}
+                            </h6>
+
+                            <h5>₦{{ query.price|floatformat:2 }}</h5>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <!--                <img id="slideRight" class="arrow hide" src="{% static 'images/arrow-down.png' %}">-->
+            <script>
+                let buttonRight = document.getElementById('slideRight');
+                let buttonLeft = document.getElementById('slideLeft');
+                document.getElementById('slider').addEventListener('mouseover', function(){
+
+
+                buttonLeft.addEventListener('click', function(isLoading){
+                    document.getElementById('slider').scrollLeft -= 180
+
+                })
+
+                buttonRight.addEventListener('click', function(){
+                    document.getElementById('slider').scrollLeft += 180
+
+                })
+                })
+
+            </script>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<br>
+<!--<div class="card shadow mb-4">-->
+<!--    <div class="card-header py-3">-->
+<!--        <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>-->
+<!--    </div>-->
+<!--    <div class="card-body">-->
+<!--        <div class="chart-area">-->
+<!--            <canvas id="myAreaChart" width="300" height="300"></canvas>-->
+<!--        </div>-->
+<!--        <hr>-->
+<!--        Styling for the area chart can be found in the-->
+<!--        <code>/MyEshop/startbootstrap-sb-admin-2-gh-pages/js/demo/chart-area-demo.js</code>-->
+<!--        file.-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+<script>
+    // Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#858796';
+
+function number_format(number, decimals, dec_point, thousands_sep) {
+  // *     example: number_format(1234.56, 2, ',', ' ');
+  // *     return: '1 234,56'
+  number = (number + '').replace(',', '').replace(' ', '');
+  var n = !isFinite(+number) ? 0 : +number,
+    prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+    sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+    dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+    s = '',
+    toFixedFix = function(n, prec) {
+      var k = Math.pow(10, prec);
+      return '' + Math.round(n * k) / k;
+    };
+  // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+  s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+  if (s[0].length > 3) {
+    s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+  }
+  if ((s[1] || '').length < prec) {
+    s[1] = s[1] || '';
+    s[1] += new Array(prec - s[1].length + 1).join('0');
+  }
+  return s.join(dec);
+}
+
+// Area Chart Example
+var ctx = document.getElementById("myAreaChart");
+var myLineChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    datasets: [{
+      label: "Earnings",
+      lineTension: 0.3,
+      backgroundColor: "rgba(78, 115, 223, 0.05)",
+      borderColor: "rgba(78, 115, 223, 1)",
+      pointRadius: 3,
+      pointBackgroundColor: "rgba(78, 115, 223, 1)",
+      pointBorderColor: "rgba(78, 115, 223, 1)",
+      pointHoverRadius: 3,
+      pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+      pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+      pointHitRadius: 10,
+      pointBorderWidth: 2,
+      data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
+    }],
+  },
+  options: {
+    maintainAspectRatio: false,
+    layout: {
+      padding: {
+        left: 10,
+        right: 25,
+        top: 25,
+        bottom: 0
+      }
+    },
+    scales: {
+      xAxes: [{
+        time: {
+          unit: 'date'
+        },
+        gridLines: {
+          display: false,
+          drawBorder: false
+        },
+        ticks: {
+          maxTicksLimit: 7
+        }
+      }],
+      yAxes: [{
+        ticks: {
+          maxTicksLimit: 5,
+          padding: 10,
+          // Include a dollar sign in the ticks
+          callback: function(value, index, values) {
+            return '$' + number_format(value);
+          }
+        },
+        gridLines: {
+          color: "rgb(234, 236, 244)",
+          zeroLineColor: "rgb(234, 236, 244)",
+          drawBorder: false,
+          borderDash: [2],
+          zeroLineBorderDash: [2]
+        }
+      }],
+    },
+    legend: {
+      display: false
+    },
+    tooltips: {
+      backgroundColor: "rgb(255,255,255)",
+      bodyFontColor: "#858796",
+      titleMarginBottom: 10,
+      titleFontColor: '#6e707e',
+      titleFontSize: 14,
+      borderColor: '#dddfeb',
+      borderWidth: 1,
+      xPadding: 15,
+      yPadding: 15,
+      displayColors: false,
+      intersect: false,
+      mode: 'index',
+      caretPadding: 10,
+      callbacks: {
+        label: function(tooltipItem, chart) {
+          var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+          return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+        }
+      }
+    }
+  }
+});
+
+
+
+
+</script>
+
+<style>
+.column{
+	width: 100%;
+	padding: 1px;
+
+}
+
+#slide-wrapper{
+	max-width: 100%;
+	display: flex;
+	min-height: 100px;
+	align-items: center;
+}
+
+#slider{
+	width: 100%;
+	display: flex;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+
+}
+
+<!--#slider::-webkit-scrollbar {-->
+<!--    width: 8px;-->
+<!--}-->
+
+<!--#slider::-webkit-scrollbar-track {-->
+<!--    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);-->
+
+<!--}-->
+
+<!--#slider::-webkit-scrollbar-thumb {-->
+<!--  background-color: lightgrey;-->
+<!--   border-radius: 100px;-->
+
+<!--}-->
+
+<!--#slider::-webkit-scrollbar-thumb:hover{-->
+<!--    background-color: grey;-->
+<!--}-->
+
+
+
+
+
+
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+
+<script>
+        /* globals Chart:false, feather:false */
+
+    (function () {
+      'use strict'
+
+      feather.replace()
+
+      // Graphs
+      var ctx = document.getElementById('myChart')
+      // eslint-disable-next-line no-unused-vars
+      var myChart = new Chart(ctx, {
+        type: 'line',
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Custom Chart Title',
+                fontColor: 'red'
+            }
+        },
+        data: {
+          labels: [
+          //{{ DOW_CHOICES|safe }}
+          //'{{ labels.name }}',
+          {% if request.user.vendor %}
+            {% for product in products %}
+            '{{product.id}}',
+
+            {% endfor %}
+            {% endif %}
+          ],
+          datasets: [{
+            data: [
+            {% if request.user.vendor %}
+              {% for product in products %}
+              {{product.orderitem_set.count}},
+              {% endfor %}
+              {% endif %}
+
+            ],
+            label:'Sales',
+
+            backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+        ],
+            borderColor: '#fff',
+            borderWidth: 4,
+            fontColor: 'red',
+            pointBackgroundColor: '#00FFFF',
+            fontSize: 20,
+
+
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: false
+              }
+            }]
+          },
+          fontColor: 'white',
+          legend: {
+            display: false
+          }
+        }
+      })
+    }())
+
+
+
+
+</script>
+<style>
+body {
+    margin: 0;
+    line-height: 1.6;
+    color: #212529;
+}
+.customer-image {
+    max-width: 10rem;
+    margin-bottom: 1rem;
+    padding: .5rem;
+    background: #fff;
+}
+.rounded-circle {
+    border-radius: 50%!important;
+}
+
+.customer-nav a {
+    text-decoration: none;
+    background-color: transparent;
+}
+.customer-nav a:hover {
+    background-color: #f8f9fa;
+}
+.customer-nav .list-group-item.active {
+    border-color: #dee2e6;
+    background: #dee2e6;
+    color: #212529;
+}
+.list-group-item+.list-group-item.active {
+    margin-top: -1px;
+    border-top-width: 1px;
+}
+.customer-nav .list-group-item {
+    color: #495057;
+    border-color: #e9ecef;
+}
+.list-group-item+.list-group-item {
+    border-top-width: 0;
+}
+.list-group-item.active {
+    color: #fff;
+    background-color: #bcac76;
+    border-color: #bcac76;
+}
+.align-items-center {
+    align-items: center!important;
+}
+.justify-content-between {
+    justify-content: space-between!important;
+}
+.d-flex {
+    display: flex!important;
+}
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: .75rem 1.25rem;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.075);
+}
+
+ul {
+    display: block;
+    list-style-type: disc;
+
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+.customer-profile {
+    padding: 1rem;
+    text-align: center;
+    background: #f8f9fa;
+}
+
+.card {
+    box-shadow: 0 2px 1rem rgba(0,0,0,.15);
+}
+.border-0 {
+    border: 0!important;
+}
+.card {
+    position: relative;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid transparent;
+    border-radius: 5px;
+}
+
+
+
+</style>
+
+{% endblock content %}

@@ -1,0 +1,54 @@
+{% extends 'store/base.html' %}
+{% block title %} MyEshop | Card {% endblock %}
+
+{% block content %}
+{% include "store/selected_nav.html" %}
+
+{% load crispy_forms_tags %}
+{% load static %}
+<script src="https://js.stripe.com/v3/"></script>
+<script src="{% static 'js/3dsec.js' %}" type="text/javascript"></script>
+<script>
+  _3dsec('{{ STRIPE_PUBLISHABLE_KEY }}', '{{payment_intent_secret}}');
+
+
+</script>
+
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-lg-7">
+            <div style="padding:  20px;
+                  border-radius: 3px;
+                  margin-bottom: 20px;"
+                 class="row box-element border rounded overflow-hidden flex-md-row mb-4  h-md-250 position-relative">
+                <div class="col p-8 d-flex flex-column position-static">
+                    <div id="3ds_result">
+                        <div class="row hidden" id="success">
+                            <div class="col-lg-3" align="center">
+                                <img height="250px" width="270px"
+                                     src="{% static 'images/images.png' %}" alt="">
+                            </div>
+                            <div class="col-lg-5 container" style="
+                        justify-content: center;
+                        text-align: center;
+                        display: flex;
+                        flex-direction: column;">
+                                <h5>Your payment has been made successfully. You can now proceed to becoming a
+                                    vendor</h5>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<style>
+    .hidden {
+        display: none;
+    }
+
+</style>
+
+{% endblock content %}

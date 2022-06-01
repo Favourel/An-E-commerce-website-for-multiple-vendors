@@ -1,0 +1,180 @@
+<!doctype html>
+{% load static %}
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+
+
+    <title>
+    Myshop | Store
+</title>
+</head>
+
+<style>
+    body{
+	background-color: #f6f9fc !important;
+	margin-top: 2rem;
+}
+
+h1,h2,h3,h4,h5,h6{
+	color:hsl(0, 0%, 30%);
+}
+@media (min-width: 48em) {
+
+.box-element{
+	box-shadow:hsl(0, 0%, 80%) 0 0 16px;
+	background-color: #fff;
+	border-radius: 4px;
+	padding: 45px;
+}
+}
+@media only screen and (max-width: 600px) {
+.box-element{
+	border-radius: 4px;
+	padding: 3px;
+    }
+}
+
+
+
+
+</style>
+
+<body >
+<style>
+body {
+    background: url('{% static 'images/corner-4.png' %}') no-repeat;
+    background-attachment: fixed;
+    object-fit: cover
+    background-size: cover;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: right
+    opacity: 0.3;
+    border-top-right-radius: .375rem;
+
+    fill: #fff
+    }
+
+</style>
+
+<div class="col-md-12">
+    {% if messages %}
+        {% for msg in messages %}
+            <div id="overlay" class="alert alert-{{ msg.tags }} alert-dismissible fade show text-center" role="alert">
+                <b>{{ msg }}</b>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div><br>
+<div class="container" align="center">
+    <div class="col-lg-6">
+        <style>
+            .col-lg-6 {
+                padding: 5px;
+            }
+        </style>
+        <div style="border-radius: 3px;margin-bottom: 20px;" class="box-element rounded overflow-hidden ">
+            <div class="d-flex flex-column position-static">
+                <form id="login-form" method="POST" action="">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <h3 class="font-weight-light mb-4" style="margin-bottom: 2px;">Store |
+                            <a href="{% url 'home' %}" class="text-decoration-none">
+                                <svg style="box-shadow: 1px 1px grey;
+                                background-color: #00BFFF;
+                                background-image: linear-gradient(160deg, #80D0C7 10%,  #0093E9 90%);
+                                border-radius: 10px;
+                                width: 45px;
+                                height: 45px;
+                                padding: 9px;
+                                padding-bottom: 10px;
+                                padding-top: 10px;
+                                color: white" width="30px" height="30px" viewBox="0 0 16 16"
+                                     class="bi bi-cart-check-fill"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM4 14a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm7 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm.354-7.646a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
+                                </svg>
+                                <strong style=" color: black;display: inline-block; font-family:
+                                Florence;text-shadow: 1px 1px 1px grey;font-size: 1.5rem">MyEshop
+                                </strong>
+                            </a>
+                        </h3>
+                        <hr>
+                        {{ u_form|crispy }}
+                    </fieldset>
+
+                    <button id="submit" type="submit" class="btn btn-block btn-info">
+                        <div class="spinner-border text-light hidden" id="spinner" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <span id="button-text">SUBMIT</span>
+                    </button>
+                    <style>
+                        .spinner-border {
+                            width: 1.5rem;
+                            height: 1.5rem;
+                        }
+                    </style>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <a href="javascript:history.go(-1)" class="btn mt-2 mb-3 btn-outline-info">&#x2190; Go back</a>
+</div>
+<style>
+    .hidden {
+        display: none;
+    }
+    label {
+        float:left
+    }
+</style>
+<script>
+    let paymentForm = document.getElementById('login-form');
+	if (paymentForm) {
+		paymentForm.addEventListener('submit', function () {
+		    console.log("login button clicked");
+			changeLoadingState(true);
+
+	    }
+	  );
+	}
+
+    var changeLoadingState = function(isLoading) {
+        if (isLoading) {
+            document.getElementById("submit").disabled = true;
+            document.querySelector("#spinner").classList.remove("hidden");
+            document.querySelector("#button-text").classList.add("hidden");
+        } else {
+            document.getElementById("submit").disabled = false;
+            document.querySelector("#spinner").classList.add("hidden");
+            document.querySelector("#button-text").classList.remove("hidden");
+        }
+    };
+</script>
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>

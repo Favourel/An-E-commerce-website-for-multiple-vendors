@@ -1,0 +1,961 @@
+{% extends 'store/base.html' %}
+{% block title %} MyEshop | Product - {{ product.name }} {% endblock %}
+
+{% block content %}
+{% include "store/nav.html" %}
+{% load static %}
+{% load humanize %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<style>
+#main-footer{
+    background: #27384c;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    margin-top: 70px;
+}
+
+.col-6 {
+    padding: 3px;
+}
+
+.me:hover {
+    object-fit: cover;
+    width: 100%;
+	height: 210px;
+}
+@media only screen and (max-width: 600px) {
+.f {
+
+
+}
+}
+
+@media (min-width: 48em) {
+    .f {
+
+    }
+}
+
+.box-elemett{
+	background-color: #fff;
+	border-radius: 4px;
+	padding: 10px;
+	padding-bottom: 50px;
+	border: 1px solid #dddddd;
+
+}
+.box-elemett:hover {
+	box-shadow:hsl(0, 0%, 80%) 0 0 16px;
+	background-color: #fff;
+	border-radius: 4px;
+	padding: 10px;
+	padding-bottom: 50px;
+}
+#thumb {
+    width: 100%;
+    height: 200px;
+    -webkit-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+    -moz-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+    box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+}
+
+
+
+</style>
+<style>
+    .toast-bottom-left, .toast-bottom-center, .toast-bottom-right {
+    bottom: 1.5rem;
+}
+@media (max-width: 575.98px)
+.toast-container {
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+.toast-container {
+  position: fixed; /* Stay in place */
+  z-index: 2; /* Sit on top */
+  padding-top: 80px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: auto; /* Full height */
+
+}
+
+.toast-top-center .toast, .toast-bottom-center .toast {
+    margin-right: auto;
+    margin-left: auto;
+}
+.toast.hide {
+    display: none;
+}
+.fade:not(.show) {
+    opacity: 0;
+}
+.toast {
+    display: none;
+    opacity: 0;
+}
+
+.toast {
+    max-width: 350px;
+    font-size: .875rem;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 0 solid rgba(0,0,0,0);
+    box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.1);
+
+    opacity: 0;
+    border-radius: .3125rem;
+}
+.fade {
+    transition: opacity 0.15s linear;
+}
+.text-white {
+    color: #fff !important;
+}
+.bg-success {
+    background-color: #42d697 !important;
+}
+.toast-header {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: .25rem .75rem;
+    color: #7d879c;
+    background-color: rgba(255,255,255,0.85);
+    background-clip: padding-box;
+    border-bottom: 0 solid rgba(0,0,0,0.05);
+}
+.toast-header [class*='czi-'] {
+    font-size: 1.25em;
+}
+
+button.close {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+}
+.close {
+    transition: opacity 0.15s ease-in-out;
+    opacity: .7;
+}
+
+.close {
+    float: right;
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1;
+    color: #4b566b;
+    text-shadow: none;
+    opacity: .5;
+}
+
+</style>
+
+<div class="toast-container toast-bottom-center" style="height: 10px;">
+    <div class="toast mb-3 fade " id="cart-toast" data-delay="5000" role="alert" aria-live="assertive"
+         aria-atomic="true">
+        <div class="toast-header bg-success text-white">
+            <!--            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle" fill="currentColor"-->
+            <!--                 xmlns="http://www.w3.org/2000/svg">-->
+            <!--                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>-->
+            <!--                <path fill-rule="evenodd"-->
+            <!--                      d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"/>-->
+            <!--            </svg>-->
+            <svg width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="currentColor"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                      d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+            </svg>
+            <h6 class="font-size-sm text-white mb-0 ml-2">Added To Cart</h6>
+            <button class="close text-white ml-auto mb-1" type="button" data-dismiss="toast" aria-label="Close"><span
+                    aria-hidden="true">×</span></button>
+        </div>
+        <div class="toast-body"><b class="cart_result"></b></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-9">
+        <div class="box-element">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-sm-5">
+                    <style>
+                    .col-lg-9, .col-lg-3, .col-lg-12, .col-lg-6{
+                        padding: 10px;
+                    }
+                        @media only screen and (max-width: 1000px) {
+                            #featured {
+                                width: 100%;
+                                height: 230px;
+                                -webkit-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+                                -moz-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+                                box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+                                transition: .3s;
+                            }
+                        }
+                        @media (min-width: 48em) {
+                            #featured {
+                                width: 100%;
+                                height: 350px;
+                                transition: .3s;
+                            }
+                        }
+
+                    </style>
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" id="featured">
+
+                    <div id="slide-wrapper">
+                        <!--                        <img id="slideLeft" class="arrow hide" src="{% static 'images/arrow-up.png' %}">-->
+                        <div id="slider">
+                            <img class="thumbnail highlight" src="{{ product.image.url }}">
+                            {% if product.image2 %}
+                            <img class="thumbnail" src="{{ product.image2.url }}">
+                            <img class="thumbnail" src="{{ product.imageURL }}">
+                            <img class="thumbnail" src="{{ product.image2.url }}">
+                            <!--                            <img class="thumbnail" src="{{ product.image.url }}">-->
+                            {% endif %}
+                            {% for image in product.image_set.all%}
+                            {% endfor %}
+                        </div>
+                        <!--                        <img id="slideRight" class="arrow hide" src="{% static 'images/arrow-down.png' %}">-->
+                    </div>
+                    <style>
+                        #content-wrapper{
+                            display: flex;
+                            flex-wrap: wrap;
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                        .column{
+                            width: 600px;
+                            padding: 10px;
+
+                        }
+
+                        .thumbnail{
+                            max-width: 35px;
+                            max-height: 35px;
+                            cursor: pointer;
+                            opacity: 0.5;
+                            margin: 5px;
+                            transition: .5s;
+                        }
+
+                        .thumbnail:hover{
+                            opacity:1;
+                        }
+
+                        .highlight{
+                            opacity: 1;
+                        }
+
+                        #slide-wrapper{
+                            max-width: auto;
+                            display: flex;
+                            min-height: 70px;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                        #slider{
+                            width: auto;
+                            display: flex;
+                            flex-wrap: nowrap;
+                            overflow-x: auto;
+
+                        }
+
+                        #slider::-webkit-scrollbar {
+                             width: 8px;
+
+                        }
+
+                        #slider::-webkit-scrollbar-track {
+                            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+
+                        }
+
+                        #slider::-webkit-scrollbar-thumb {
+                          background-color: #dede2e;
+                          outline: 1px solid slategrey;
+                           border-radius: 100px;
+
+                        }
+
+                        #slider::-webkit-scrollbar-thumb:hover{
+                            background-color: #18b5ce;
+                        }
+
+                        .arrow{
+                            width: 15px;
+                            height: 15px;
+                            cursor: pointer;
+                            transition: .3s;
+                        }
+
+                        .arrow:hover{
+                            opacity: .5;
+                            width: 20px;
+                            height: 20px;
+                        }
+
+                    </style>
+
+                    <script type="text/javascript">
+                        let thumbnails = document.getElementsByClassName('thumbnail')
+
+                        let activeImages = document.getElementsByClassName('highlight')
+
+                        for (var i=0; i < thumbnails.length; i++){
+
+                            thumbnails[i].addEventListener('mouseover', function(){
+                                console.log(activeImages)
+
+                                if (activeImages.length > 0){
+                                    activeImages[0].classList.remove('highlight')
+                                }
+
+                                this.classList.add('highlight')
+                                document.getElementById('featured').src = this.src
+                            })
+                        }
+
+
+                        let buttonRight = document.getElementById('slideRight');
+                        let buttonLeft = document.getElementById('slideLeft');
+
+                        buttonLeft.addEventListener('click', function(isLoading){
+                            document.getElementById('slider').scrollLeft -= 180
+
+                        })
+
+                        buttonRight.addEventListener('click', function(){
+                            document.getElementById('slider').scrollLeft += 180
+
+                        })
+
+                    </script>
+                </div>
+                <br>
+                <br>
+                <div class="col-lg-7 col-md-6 col-sm-7">
+                    <h4 style="margin-top: 5px;" class="font-weight-light">{{ product.name|safe }}</h4>
+                    <hr>
+                    <h5 style="display: inline-block;float: left"><strong>
+                        ₦{{ product.price|floatformat:2 }}</strong>
+                    </h5>
+                    <br>
+                    {% if user.is_authenticated %}
+                    <button style="box-shadow: 4px 6px 5px grey;" data-product="{{ product.id }}" data-toggle="modal"
+                            data-target="#add-wishlist"
+                            data-href='{{ product.get_api_like_url }}'
+                            class="nav-success sticky-top like-btn add-to-car float-left btn mb-3 btn-info btn-block"
+                            role="button">
+                        Add To Cart
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.2rem" fill="currentColor"
+                                 class="bi bi-bag ml-1 mb-1" viewBox="0 0 16 16" style="align-items: center">
+                                <path fill-rule="evenodd"
+                                      d="M8 1a2.5 2.5 0 0 0-2.5 2.5V4h5v-.5A2.5 2.5 0 0 0 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V5H2z"/>
+                        </svg>
+<!--                        <img class="mr-2" src="https://img.icons8.com/cute-clipart/28/000000/wish-list.png"/>-->
+                    </button>
+
+                    <div class="modal fade" id="add-wishlis" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                            <div class="modal-content" style="background-color: #f6f9fc !important">
+                                <div class="modal-body">
+                                    <b style="color: #007bff">{{ product }}</b> has been added to you cart.
+                                    <br>
+                                    <div class="d-flex mt-2"
+                                         style="justify-content: center; align-items: center">
+                                        <button style="box-shadow: 4px 6px 5px grey;" type="button"
+                                                class="btn mt-2 mr-2 btn-outline-secondary" data-dismiss="modal">Ok,
+                                            close
+                                        </button>
+                                        <a style="box-shadow: 4px 6px 5px grey;" href="{% url 'cart' %}"
+                                           class="btn btn-info mt-2">View Cart</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                     <a style="box-shadow: 4px 6px 5px grey;" data-product="{{ product.id }}"
+                            href="{{ product.get_add_product_url }}"
+                            class="nav-success sticky-top float-left btn mb-3 btn-info btn-block"
+                            role="button">
+<!--                        <img class="mr-2" src="https://img.icons8.com/cute-clipart/28/000000/wish-list.png"/>-->
+                        Add To Cart
+                         <svg xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.2rem" fill="currentColor"
+                                 class="bi bi-bag ml-1 mb-1" viewBox="0 0 16 16" style="align-items: center">
+                                <path fill-rule="evenodd"
+                                      d="M8 1a2.5 2.5 0 0 0-2.5 2.5V4h5v-.5A2.5 2.5 0 0 0 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V5H2z"/>
+                        </svg>
+                    </a>
+<!--                    <button data-toggle="modal" data-target="#wishlistFunc" style="box-shadow: 4px 6px 5px grey;"-->
+<!--                            class="nav-success sticky-top float-left mb-4 btn btn-info btn-block"-->
+<!--                            role="button">-->
+<!--                        <img class="mr-2" src="https://img.icons8.com/cute-clipart/28/000000/wish-list.png"/>-->
+<!--                        Add To Wishlist-->
+<!--                    </button>-->
+                    {% endif %}
+                    {% if product.seller == request.user %}
+                    <div class="mb-3 " style="display: inline-block;">
+                        <a href="{% url 'store-update' product.id %}" style="box-shadow: 4px 6px 5px grey;"
+                           class="btn  btn-outline-secondary ml-lg-2">Update product</a>
+                        <button  style="box-shadow: 4px 6px 5px grey;"
+                           class="btn btn-outline-danger ml-lg-2" data-toggle="modal" data-target="#exampleDelete">Delete
+                            product </button>
+                    </div>
+                    {% endif %}
+                    <br>
+                    <div class="alert detail-bg alert-primary row mb-2" style="margin: 1px">
+                        <img src="{{ product.seller.customer_pics.url }}"
+                             alt="" class="shadow img-sell rounded-circle">
+                        <div class="col" style="display: inline-block">seller:
+                            <a href="{% url 'user-post' product.seller %}">
+                                {% if product.seller.first_name %}
+                                {{ product.seller.first_name }}
+                                {% else %}
+                                {{ product.seller.username }}
+                                {% endif %}
+                            </a>
+                            <br>
+
+                            <p style="color:grey; font-size: 13px">
+                                <img src="https://img.icons8.com/ios-filled/20/000000/location-update--v2.png"/>
+                                {{ product.seller.location }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <style>
+                        .detail-bg {
+                            background-color: #f6f9fc !important;
+                        }
+                        .img-sell {
+                            width: 50px;
+                            height: 50px;
+                            transition: .3s;
+                        }
+                        .img-sell:hover {
+                            width: 55px;
+                            height: 55px;
+                        }
+
+
+
+
+                    </style>
+                    <div class="alert detail-bg alert-primary" role="alert">
+                        <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-download"
+                             fill="currentColor"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                  d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path fill-rule="evenodd"
+                                  d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                        </svg>
+                        <strong>{{ product.order_count }}</strong> sales
+                    </div>
+                    <strong>Category</strong>
+                    <p class="mr-auto right float-right text-right">{{ product.category }}</p>
+                    <hr>
+                    <strong>Date Uploaded</strong>
+                    <p class="mr-auto right float-right text-right"> {{ product.date|date }}</p>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <div class="box-element container">
+            <h4>
+                <b> Product Description</b>
+            </h4>
+            <hr>
+            <div class="article-content">
+                {{ product.description | safe }}
+            </div>
+            <!--                    white-space: pre-line;-->
+            <style>
+                p img {
+                    vertical-align: middle;
+                    border-style: none;
+                }
+                p .img-fluid {
+                    max-width: 100%;
+                    height: auto;
+                }
+                .article-content {
+
+                    word-wrap: break-word;
+                    display: -webkit-flex;
+                    display: flex;
+                    -webkit-flex-direction: column;
+                    flex-direction: column;
+                }
+
+
+            </style>
+        </div>
+        <div class="modal fade" id="exampleDelete" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" style="background-color: #f6f9fc !important">
+                    <div class="modal-body">
+                        <form action="{{ product.get_absolute_url }}" method="post">
+                            {% csrf_token %}
+                            <h6>Are you sure you want to delete <b style="color: #007bff">{{ product }}</b> from
+                                your
+                                store?</h6>
+                            <div class="float-right">
+                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close
+                                </button>
+                                <input type="submit" value="CONFIRM" class="btn btn-info">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="wishlistFunc" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content" style="background-color: #f6f9fc !important">
+                    <div class="modal-body">
+                        <h4>You have to login to update your Cart</h4>
+
+                        <div class="float-right">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok, I understand
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <section class="box-element">
+            <h4>
+                <b>Customer Reviews</b>
+            </h4>
+            <hr>
+            {% if comments %}
+            <div class="slideshow-container">
+                {% for p in comments %}
+                <div class="mySlides">
+                    <img src="{{ p.customer_info.customer_pics.url }}" width="80px" height="80px" alt=""
+                         class="rounded-circle img-fluid mb-3">
+                    <p>{{ p.review }}</p>
+                    <h4 class="author">
+                        <b>- {{ p.customer_info }}</b>
+                    </h4>
+                    <!--                    <div>-->
+                    <!--                        |safe|truncatewords:"4"|linebreaks-->
+                    <!--                        {% now "jS F Y H:i" %}-->
+                    <!--                    </div>-->
+                    <small style="opacity: 0.6">
+
+                        {{ p.date_added|naturaltime|truncatewords:'2' }}
+
+                    </small>
+                </div>
+                {% endfor %}
+                <a class="prev" onclick="plusSlides(-1)">❮</a>
+                <a class="next" onclick="plusSlides(1)">❯</a>
+
+            </div>
+            {% else %}
+            <h2 style="opacity: 0.6" class="align-items-center" align="center">
+                <b>
+                    <svg width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-chat-left-dots-fill"
+                         fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                              d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793V2zm5 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                    </svg>
+                    No review found here
+                </b>
+            </h2>
+            {% endif %}
+
+            <div class="dot-container">
+                {% for p in product.productreview_set.all %}
+                <span class="dot" onclick="currentSlide({{p.id}})"></span>
+                <!--            <span class="dot" onclick="currentSlide(2)"></span>-->
+                <!--            <span class="dot" onclick="currentSlide(3)"></span>-->
+
+                {% endfor %}
+            </div>
+            <br>
+            <h5>
+                <i>Post Review</i>
+            </h5>
+            <form id="form" method="POST" action="{% url 'productReview' product.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <!--                    <label>Review</label>-->
+                    <!--                    <input  type="text" name="title">-->
+                    {% if request.user.is_authenticated %}
+                    <input type="text" name="review" placeholder="Comment" id="review" class="form-control" required="">
+                    {% else %}
+                    <input type="text" name="review" placeholder="Comment" class="form-control" disabled>
+                    {% endif %}
+                </div>
+                <button data-product="{{ product.id }}" class="btn btn-info" type="submit">POST</button>
+            </form>
+            <div id="output">
+
+            </div>
+
+            <script>
+                var slideIndex = 1;
+                showSlides(slideIndex);
+
+                function plusSlides(n) {
+                  showSlides(slideIndex += n);
+                }
+
+                function currentSlide(n) {
+                  showSlides(slideIndex = n);
+                }
+
+                function showSlides(n) {
+                  var i;
+                  var slides = document.getElementsByClassName("mySlides");
+                  var dots = document.getElementsByClassName("dot");
+                  if (n > slides.length) {slideIndex = 1}
+                    if (n < 1) {slideIndex = slides.length}
+                    for (i = 0; i < slides.length; i++) {
+                      slides[i].style.display = "none";
+                    }
+                    for (i = 0; i < dots.length; i++) {
+                      dots[i].className = dots[i].className.replace(" act", "");
+                    }
+                  slides[slideIndex-1].style.display = "block";
+                  dots[slideIndex-1].className += " act";
+                }
+
+            </script>
+        </section>
+
+    </div>
+    <div class="col-lg-3">
+
+        <div class="box-element" id="form-wrapper">
+            <h4>Delivery method</h4>
+            <hr>
+            {% if user.is_authenticated %}
+            <h6>Dear, {{ user.username }}</h6>
+            {% else %}
+            <h6>Dear, Customer</h6>
+            {% endif %}
+            <div class="row no-gutters nowrap">
+                <style>
+                    .col-2 {
+                        border: 1px solid #ededed;
+                        align-self: baseline;
+                        flex-shrink: 0;
+                        border-radius: 4px;
+                        padding: 4px;
+                        padding-left: 4px;
+                        padding-right: 4px;
+                    }
+
+                </style>
+                <div class="col-2">
+                    <img src="{% static 'images/03.png' %}" class="ml-1 mr-1" width="35px" height="35px" alt="">
+                </div>
+                <div class="col-8">
+                    Product will be delivered to the address you make known to vendor.
+                    {{ product.seller.vendor.vendor_delivery_method }}
+                </div>
+            </div>
+            <!--                <hr>-->
+            <!--                <ul>-->
+            <!--                {{ product.seller.store_delivery_method|safe }}-->
+            <!--                </ul>-->
+        </div>
+        <br>
+        <div class="sticky-top" style="top: 90px">
+            <div class="box-element">
+                <h4>Do you have something to sell?</h4>
+                <p>click here to create or sell
+                    <a href="{% url 'store-create' %}">
+                        <svg width="1.5em" height="1.5em" viewBox="0 0 16 16"
+                             class="bi bi-arrow-right-short float-right mr-auto"
+                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                  d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                        </svg>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        * {box-sizing: border-box}
+        section {font-family: Verdana, sans-serif; margin:0}
+
+        /* Slideshow container */
+        .slideshow-container {
+          position: relative;
+          transition: .3s;
+
+        }
+
+        /* Slides */
+        .mySlides {
+          display: none;
+          padding: 20px;
+          text-align: center;
+          align-items: center;
+          text-align: center;
+          transition: .5s;
+        }
+
+        /* Next & previous buttons */
+        .prev, .next {
+        transition: .3s;
+          cursor: pointer;
+          position: absolute;
+          top: 50%;
+          width: auto;
+          margin-top: -30px;
+          padding: 16px;
+          color: #888;
+          font-weight: bold;
+          font-size: 20px;
+          border-radius: 0 3px 3px 0;
+          user-select: none;
+        }
+
+        /* Position the "next button" to the right */
+        .next {
+        transition: .3s;
+          position: absolute;
+          right: 0;
+          border-radius: 3px 0 0 3px;
+        }
+
+        /* On hover, add a black background color with a little bit see-through */
+        .prev:hover, .next:hover {
+          color: #fff;
+          background-color: transparent;
+          border-radius: 100%;
+          box-shadow: 2px 2px 2px 2px grey;
+        }
+
+        /* The dot/bullet/indicator container */
+        .dot-container {
+            transition: .3s;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* The dots/bullets/indicators */
+        .dot {
+          transition: .3s;
+          cursor: pointer;
+          height: 15px;
+          width: 15px;
+          margin: 0 2px;
+          background-color: #bbb;
+          border-radius: 50%;
+          display: inline-block;
+          transition: background-color 0.6s ease;
+        }
+
+        /* Add a background color to the active dot/circle */
+        .act, .dot:hover {
+          background-color: #717171;
+        }
+
+        /* Add an italic font style to all quotes */
+        q {font-style: italic;}
+
+        /* Add a blue color to the author */
+        .author {color: cornflowerblue;}
+
+    </style>
+
+    {% if seller_products|length > 0 %}
+    <div class="col-lg-12">
+        <div class="box-element">
+            <h4><b>More products from this seller</b></h4>
+
+            <div class="row p-2">
+                {% for query in seller_products %}
+                <div class="col-lg-2 col-md-3 col-sm-3 col-6">
+                    <style>
+                        .col-6 {
+                            padding: 10px;
+                        }
+
+
+                    </style>
+                    <a href="{% url 'store-detail' query.id %}" class="text-decoration-none" style="color: black;">
+                        <img src="{{ query.image.url }}"
+                             alt="{{ query.name }} with quality amazing HD picture" id="thumb">
+                        <div class="mt-1">
+                            <h6 style="font-size: 15px" class="text-truncate">
+                                {{ query.name|safe|truncatewords:"4"|linebreaks }}
+                            </h6>
+
+                            <h5>₦{{ query.price|floatformat:2 }}</h5>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <br>
+    {% endif %}
+
+    {% if category_products|length > 0 %}
+    <div class="col-lg-12">
+        <div id="category-content-wrapper" class="box-element">
+            <h4><b>You may also like</b></h4>
+            <div class="category-column">
+                <div id="category-slide-wrapper">
+                    <div id="category-slider">
+                        {% for query in category_products %}
+                        <div class="col-lg-2 col-md-4 col-sm-4 col-6">
+                            <style>
+                                .col-6 {
+                                    padding: 10px;
+                                }
+                            </style>
+                            <a href="{% url 'store-detail' query.id %}" class="text-decoration-none"
+                               style="color: black;">
+                                <img src="{{ query.image.url }}"
+                                     alt="{{ query.name }} with quality amazing HD picture" id="thumb">
+                                <div class="mt-1">
+                                    <h6 style="font-size: 15px" class="text-truncate">
+                                        {{ query.name|safe|truncatewords:"4"|linebreaks }}
+                                    </h6>
+
+                                    <h5>₦{{ query.price|floatformat:2 }}</h5>
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <style>
+        .category-column{
+            width: 100%;
+            padding: 1px;
+
+        }
+
+        #category-slide-wrapper{
+            max-width: 100%;
+            display: flex;
+            min-height: 100px;
+            align-items: center;
+        }
+
+        #category-slider{
+            width: 100%;
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+
+        }
+
+<!--        #category-slider::-webkit-scrollbar {-->
+<!--            width: 8px;-->
+<!--        }-->
+
+<!--        #category-slider::-webkit-scrollbar-track {-->
+<!--            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);-->
+
+<!--        }-->
+
+<!--        #category-slider::-webkit-scrollbar-thumb {-->
+<!--          background-color: lightgrey;-->
+<!--           border-radius: 100px;-->
+
+<!--        }-->
+
+<!--        #category-slider::-webkit-scrollbar-thumb:hover{-->
+<!--            background-color: grey;-->
+<!--        }-->
+
+    </style>
+</div>
+<script>
+    var updateBtns = document.getElementsByClassName('elo')
+for( i = 0; i < updateBtns.length; i++){
+    updateBtns[i].addEventListener('click', function(){
+        alert('Your Cart can not be updated. You have to login!')
+
+    }
+    )
+    }
+
+</script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('.add-to-cart').click(function () {
+        var cart = $('.shopping-cart');
+        var imgtodrag = $('#featured');
+        if (imgtodrag) {
+            var imgclone = imgtodrag.clone()
+                .offset({
+                top: imgtodrag.offset().top,
+                left: imgtodrag.offset().left
+            })
+                .css({
+                'opacity': '0.8',
+                    'position': 'absolute',
+                    'height': '150px',
+                    'width': '150px',
+                    'z-index': '100'
+            })
+                .appendTo($('body'))
+                .animate({
+                'top': cart.offset().top + 10,
+                    'left': cart.offset().left + 10,
+                    'width': 75,
+                    'height': 75
+            }, 1000, 'easeInOutExpo');
+
+            setTimeout(function() {
+                cart.effect("bounce", {times:3}, 300
+
+                );
+            } );
+
+            imgclone.animate({
+                'width': 0,
+                'height': 0
+            }, function () {
+                $(this).detach()
+            });
+        }
+        });
+        });
+
+
+</script>
+
+<br>
+{% endblock content %}

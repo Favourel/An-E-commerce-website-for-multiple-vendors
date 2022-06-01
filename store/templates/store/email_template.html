@@ -1,0 +1,79 @@
+<div class="info info-warning col-12">
+    <svg style="box-shadow: 1px 1px grey;
+                                background-color: #00BFFF;
+                                background-image: linear-gradient(160deg, #80D0C7 10%,  #0093E9 90%);
+                                border-radius: 10px;
+                                width: 45px;
+                                height: 45px;
+                                padding: 9px;
+                                padding-bottom: 10px;
+                                padding-top: 10px;
+                                color: white" width="30px" height="30px" viewBox="0 0 16 16"
+         class="bi bi-cart-check-fill"
+         fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd"
+              d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM4 14a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm7 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm.354-7.646a.5.5 0 0 0-.708-.708L8 8.293 6.854 7.146a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
+    </svg>
+    <h2>Hello, {{ user_info }} 😊</h2>
+
+    This is to confirm that you ordered the following below
+    <br>
+    <table style="border: 1px solid black; margin-top: 10px;" border="1">
+        <tr>
+            <th>S.no</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+
+        </tr>
+        {% for order in order_details %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><img height="40px" width="40px" src="{{ order.product.image.url }}" alt=""></td>
+            <td>{{ order.product }}</td>
+            <td>₦{{ order.product.price|floatformat:'2' }}</td>
+            <td>{{ order.quantity }}</td>
+        </tr>
+        <!--            <div style="display: flex;-->
+        <!--                        align-items: flex-stretch;-->
+        <!--                        padding-bottom: 10px;-->
+        <!--                        margin-bottom: 10px;-->
+        <!--                        float: right">-->
+        <!--                <div><strong>Plan:</strong></div>-->
+        <!--                <div style="flex:3;" class="float-right mr-auto"><strong>{{ order.get_cart_total|floatformat:2 }}</strong></div>-->
+        <!--            </div>-->
+        <br>
+        {% endfor %}
+    </table>
+    <br>
+    Thank you for purchasing from our website; {{host}}
+    Your product will be delivered to - {{ address }} within 1-1:30 hours from now.
+
+    <p>Thanks for shopping with us 😊. Keep patronizing.</p>
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-left float-left">
+        <p><strong style="color: #17a2b8!important;">Please note: </strong>
+            Hold the exact delivery fee and product fee when the delivery person arrives.
+        </p>
+        <h4><small>Management</small></h4>
+    </div>
+
+
+    <strong>
+        <div style="background: #27384c;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;">
+            <a href="https://www.facebook.com/favour.elodimuor/">
+                <img src="https://img.icons8.com/fluent/38/000000/facebook-new.png"/></a>
+            <a href="https://www.twitter.com/felodimuor/">
+                <img src="https://img.icons8.com/color/38/000000/twitter-squared.png"/></a>
+            <a href="/">
+                <img src="https://img.icons8.com/fluent/38/000000/instagram-new.png"/>
+            </a>
+            <p> &copy; 2020-MyEshop, Restaurant. &middot;
+            </p>
+        </div>
+    </strong>
+</div>

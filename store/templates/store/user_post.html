@@ -1,0 +1,1004 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block title %} MyEshop | {{ user.vendor.vendor_store_name }} - Products {% endblock %}
+
+{% block content %}
+{% include "store/navbar.html" %}
+<br id="product">
+
+<style>
+
+.box{
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 10px;
+    padding-bottom: 30px;
+    transition: .4s;
+
+}
+.box:hoverr {
+    box-shadow:hsl(0, 0%, 80%) 0 0 16px;
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 10px;
+    padding-bottom: 35px;
+}
+
+.heart{color: red }
+
+.heart:hover{color: #0093E9; }
+    #over{
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    cursor: pointer;
+}
+@media only screen and (max-width: 700px) {
+    .hide-category {
+        display: none;
+    }
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+}
+
+.h1, h1 {
+    font-size: 1.5rem;
+}
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    margin-bottom: .3rem;
+    font-family: vremenagrotesk,sans-serif;
+    font-weight: 700;
+    line-height: 1;
+}
+
+h1 {
+    display: block;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+.text-muted {
+    color: #868e96!important;
+}
+.lead {
+    font-size: 1.25rem;
+    font-weight: 900;
+}
+
+
+
+</style>
+
+
+<style>
+    .toast-bottom-left, .toast-bottom-center, .toast-bottom-right {
+    bottom: 1.5rem;
+}
+@media (max-width: 575.98px)
+.toast-container {
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+.toast-container {
+  position: fixed; /* Stay in place */
+  z-index: 2; /* Sit on top */
+  padding-top: 80px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: auto; /* Full height */
+
+}
+
+.toast-top-center .toast, .toast-bottom-center .toast {
+    margin-right: auto;
+    margin-left: auto;
+}
+.toast.hide {
+    display: none;
+}
+.fade:not(.show) {
+    opacity: 0;
+}
+.toast {
+    display: none;
+    opacity: 0;
+}
+
+.toast {
+    max-width: 350px;
+    font-size: .875rem;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 0 solid rgba(0,0,0,0);
+    box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.1);
+
+    opacity: 0;
+    border-radius: .3125rem;
+}
+.fade {
+    transition: opacity 0.15s linear;
+}
+.text-white {
+    color: #fff !important;
+}
+.bg-success {
+    background-color: #42d697 !important;
+}
+.toast-header {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: .25rem .75rem;
+    color: #7d879c;
+    background-color: rgba(255,255,255,0.85);
+    background-clip: padding-box;
+    border-bottom: 0 solid rgba(0,0,0,0.05);
+}
+.toast-header [class*='czi-'] {
+    font-size: 1.25em;
+}
+
+button.close {
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+}
+.close {
+    transition: opacity 0.15s ease-in-out;
+    opacity: .7;
+}
+
+.close {
+    float: right;
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1;
+    color: #4b566b;
+    text-shadow: none;
+    opacity: .5;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<br>-->
+<button class="open-button shadow" onclick="openForm()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" fill="currentColor"
+         class="bi bi-chat-text-fill"
+         viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+              d="M16 8c0 3.866-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.5 5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zm0 2.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zm0 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4z"/>
+    </svg>
+</button>
+
+<div class="chat-scroll">
+    <div class="chat-popup fade__" id="myForm">
+        <form action="/action_page.php" class="form-container">
+            <div class="media">
+                <h4 class="text-light">
+                    <b>CHAT</b>
+                </h4>
+                <div class="media-body ml-auto" align="right">
+                    <div class="ml-auto text-light" onclick="closeForm()" style="cursor: pointer">
+                        <b>X</b>
+                    </div>
+                </div>
+            </div>
+            <div class="chat">
+                <!--                <img src="{{ user.customer_pics.url }}" alt="Avatar">-->
+                <div class="chat-user-image mr-3">
+                    <img src="{{ user.customer_pics.url }}"
+                         class="avatar rounded-circle" width="30px" height="30px"
+                         alt="{{ user }}">
+
+                    <style>
+                            .bi-box .bi-bell {
+                                position:relative;
+                            }
+                            .badge_ {
+                                border-radius:100%;
+                                position:absolute;
+                                top:1;
+                                right:0.5px;
+                            }
+                            .dropdown-list-image .status-indicator {
+                                background-color:#eaecf4;
+                                height:.75rem;
+                                width:.75rem;
+                                border-radius:100%;
+                                position:absolute;
+                                bottom:0;
+                                right:0;
+                                border:.125rem solid #fff
+                            }
+                            .dropdown-list-image {
+                                position:relative;
+                                height:2.5rem;
+                                width:2.5rem
+                            }
+                            .dropdown-list-image img {
+                                height:2.5rem;width:2.5rem
+                            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </style>
+                    {% if user in loogedin_list %}
+                    <div class="chat-user-indicator bg-success"></div>
+                    {% else %}
+                    <div class="chat-user-indicator bg-dark"></div>
+                    {% endif %}
+                </div>
+                <p>Hello. How are you today?</p>
+                <span class="time-right">11:00</span>
+            </div>
+
+            <div class="chat">
+                <!--                <img src="{{ user.customer_pics.url }}" alt="Avatar">-->
+                <div class="chat-user-image mr-3">
+                    <img src="{{ user.customer_pics.url }}"
+                         class="avatar rounded-circle" width="30px" height="30px"
+                         alt="{{ user }}">
+
+                    <style>
+                        .bi-box .bi-bell {
+                            position:relative;
+                        }
+                        .badge_ {
+                            border-radius:100%;
+                            position:absolute;
+                            top:1;
+                            right:0.5px;
+                        }
+                        .dropdown-list-image .status-indicator {
+                            background-color:#eaecf4;
+                            height:.75rem;
+                            width:.75rem;
+                            border-radius:100%;
+                            position:absolute;
+                            bottom:0;
+                            right:0;
+                            border:.125rem solid #fff
+                        }
+                        .dropdown-list-image {
+                            position:relative;
+                            height:2.5rem;
+                            width:2.5rem
+                        }
+                        .dropdown-list-image img {
+                            height:2.5rem;width:2.5rem
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </style>
+                    {% if user in loogedin_list %}
+                    <div class="chat-user-indicator bg-success"></div>
+                    {% else %}
+                    <div class="chat-user-indicator bg-dark"></div>
+                    {% endif %}
+                </div>
+
+                <p>What would you like to purchase?</p>
+                <span class="time-right">11:01</span>
+            </div>
+
+            <div class="chat darker">
+                <img src="{{ request.user.customer_pics.url }}" alt="Avatar" class="right">
+                <p>Hey! I'm fine. Thanks for asking!</p>
+                <span class="time-left">11:01</span>
+            </div>
+
+            <label for="msg"><b class="text-light">Message</b></label>
+            <input placeholder="Type message.." name="msg" required>
+
+            <button type="submit" class="btn float-right btn-success">Send</button>
+            <!--        <button type="button" class="btn btn-dark" onclick="closeForm()">Close</button>-->
+        </form>
+    </div>
+</div>
+<style>
+
+.chat {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 7px;
+  margin: 7px 0;
+}
+
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+
+.chat::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.chat img {
+  float: left;
+  max-width: 60px;
+  width: 40px;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.chat img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+.time-right {
+  float: right;
+  color: #aaa;
+}
+
+.time-left {
+  float: left;
+  color: #999;
+}
+
+
+
+</style>
+
+<style>
+    .fade__ {
+        animation-name: chatAnimation;
+        animation-duration: 0.5s;
+        animation-iteration-count: 1;
+        animation-timing-function: ease;
+        animation-fill-mode: forwards;
+    }
+    @keyframes chatAnimation {
+        0% {
+            opacity: 0;
+            transform: translateY(58px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+    }
+
+
+
+</style>
+<script>
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}
+
+</script>
+<style>
+.chat-user-indicator {
+    background-color:#eaecf4;
+    height:.75rem;
+    width:.75rem;
+    border-radius:100%;
+    position:absolute;
+    bottom:0;
+    right:0;
+    border:.125rem solid #fff
+}
+.chat-user-image {
+    position:relative;
+    height:2.5rem;
+    width:2.5rem
+}
+.chat-user-image img {
+    height:2.5rem;width:2.5rem
+}
+
+* {box-sizing: border-box;}
+
+/* Button used to open the chat form - fixed at the bottom of the page */
+.open-button {
+  background-color: #007bff;
+  color: white;
+  padding: 16px 12px;
+  border: .5rem #fff solid;
+  cursor: pointer;
+  padding: .5rem;
+  position: fixed;
+  bottom: 73px;
+  right: 8px;
+  width: 65px;
+  border-radius: 100%;
+  -webkit-box-shadow: -3px -5px 7px -4px rgba(214,214,214,1);
+   -moz-box-shadow: -3px -5px 7px -4px rgba(214,214,214,1);
+   box-shadow: -3px -5px 7px -4px rgba(214,214,214,1);
+
+  position: fixed; /* Stay in place */
+  z-index: 2; /* Sit on top */
+
+  height: auto; /* Full height */
+}
+
+/* The popup chat - hidden by default */
+.chat-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 2;
+  height: 35rem;
+  width: 320px;
+}
+
+
+/* Add styles to the form container */
+.form-container {
+  max-width: auto;
+  padding: 10px;
+  background-color: white;
+
+}
+
+/* Full-width textarea */
+.form-container input {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+  resize: none;
+}
+
+/* When the textarea gets focus, do something */
+.form-container input:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit/send button */
+.form-container {
+  background-color: #373f50 !important;
+  color: #000;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: #6c757d;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+
+
+</style>
+
+<div class="toast-container toast-bottom-center" style="height: 10px;">
+    <div class="toast mb-3 fade " id="cart-toast" data-delay="5000" role="alert" aria-live="assertive"
+         aria-atomic="true">
+        <div class="toast-header bg-success text-white">
+
+            <svg width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="currentColor"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                      d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+            </svg>
+            <h6 class="font-size-sm text-white mb-0 ml-2">Added to Wishlist</h6>
+            <button class="close text-white ml-auto mb-1" type="button" data-dismiss="toast" aria-label="Close"><span
+                    aria-hidden="true">×</span></button>
+        </div>
+        <div class="toast-body"><b class="cart_result"></b></div>
+    </div>
+</div>
+<style>
+    .info {
+        max-width: 100rem;
+    }
+</style>
+
+<div class="row mt-2">
+    <div class=" col-lg-12">
+        <div class="order-lg-3">
+            <div class="cart-row">
+                <div>
+                    <div class="hero-content">
+                        <h1>
+                            {% if user.vendor.vendor_store_name %}
+                            {{ user.vendor.vendor_store_name }} store
+                            {% else %}
+                            {{ user }} store
+                            {% endif %}
+
+                            <script>
+                                 $(document).ready(function(){
+                                      function updateText(btn, newCount, verb){
+                                      btn.text(newCount + " " + verb)
+                                  }
+
+                                  $(".follow-btn").click(function(e){
+                                    e.preventDefault()
+                                    var this_ = $(this)
+                                    var likeUrl = this_.attr("data-href")
+                                    var likeCount = this_.attr("data-likes")
+                                    var addFollower = 'FOLLOW'
+                                    var removeFollower = 'UNFOLLOW'
+                                    if (likeUrl){
+                                       $.ajax({
+                                        url: likeUrl,
+                                        method: "GET",
+                                        data: {},
+                                        success: function(data){
+                                          console.log(data)
+                                          var newLikes;
+                                          if (data.follow){
+                                              updateText(this_, removeFollower, "VENDOR")
+                                              $(".follow_msg").text(data.message_user_);
+                                          } else {
+                                              updateText(this_, addFollower, "VENDOR")
+                                              // remove one like
+                                          }
+
+                                        }, error: function(error){
+                                          console.log(error)
+                                          console.log("error")
+                                        }
+                                      })
+                                    }
+
+                                  })
+                              })
+
+
+                            </script>
+                            <!--        <button data-href='{{ user.get_follower_api_url }}' class="btn btn-outline-warning btn-sm shadow follow-btn">follow Vendor</button>-->
+                        </h1>
+
+                        <div class="modal fade" id="follow" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content" style="background-color: #f6f9fc !important">
+                                    <div class="modal-body p-3" align="center">
+                                        <br>
+                                        <br>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="3rem" height="3rem"
+                                             fill="currentColor"
+                                             class="bi bi-person-plus" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zM13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                                        </svg>
+                                        <br>
+                                        <br>
+
+                                        <h4>You have to login to follow <b style="color: #007bff">{{ user }}</b> to see
+                                            what
+                                            they
+                                            share on
+                                            Elodimuor.</h4>
+                                        <br>
+
+                                        <button type="button" class="btn btn-info btn-block rounded-pill"
+                                                data-dismiss="modal">
+                                            Ok, I
+                                            understand
+                                        </button>
+                                        <br><br>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="follow_msg">
+
+                        </div>
+
+                    </div>
+                    <p class="lead text-muted">
+                        <img src="https://img.icons8.com/ios-filled/20/000000/location-update--v2.png"/>
+                        {{ user.location }}
+                    </p>
+                </div>
+                <div style="flex:2" class="float-right mt-2">
+                    {% if request.user == user %}
+                    <div class="col-md-6 d-md-block d-none float-right">
+                        <div class="input-group flex-nowrap">
+                            <b class="mt-2">Store Link</b>
+                            <input type="text" class="ml-2 form-control"
+                                   value="{{ host }}{% url 'user-post' user.username %}" id="myInput">
+                            <button class="btn btn-outline-primary copy-text-func" onclick="myFunction()">
+                                Copy link
+                            </button>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <script>
+                        /* Alert the copied text */
+
+                        function myFunction() {
+                        /* Get the text field */
+                          var copyText = document.getElementById("myInput");
+                          var copy_Text = document.getElementById("my_Input");
+
+                          /* Select the text field */
+                          copyText.select();
+                          copy_Text.select();
+                          copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+                          copy_Text.setSelectionRange(0, 99999); /*For mobile devices*/
+
+                          /* Copy the text inside the text field */
+                          document.execCommand("copy");
+                          document.execCommand("copy");
+                        }
+
+                        $(".copy-text-func").click(function(e){
+                            var this_ = $(this)
+                                function updateText(btn, newCount, verb){
+                                  btn.text("Copied!" )
+                              }
+                              updateText(this_, "Copied!")
+                            })
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if request.user == user %}
+<div class="col-md-6 d-lg-none float-right">
+    <div class="input-group flex-nowrap">
+        <b class="mt-2">Store Link</b>
+        <input type="text" class="ml-2 form-control"
+               value="{{ host }}{% url 'user-post' user.username %}" id="my_Input">
+        <button class="btn btn-outline-primary copy-text-func" onclick="myFunction()">
+            Copy link
+        </button>
+    </div>
+</div>
+{% endif %}
+<!--        <audio controls >-->
+<!--            <source onclick="playAudio({% static 'audio/2 - Big Poppa.mp3' %})"  src="{% static 'audio/2 - Big Poppa.mp3' %}">-->
+<!--            play-->
+<!--        </audio>-->
+<div class="row">
+    <div class="col-lg-3 col-md-3 hide-category mt-2">
+        <style>
+            .dropdown-item{padding-left: 3px;padding-right:3px}
+
+        </style>
+        <div class="sticky-top" style="top: 80px">
+            <div class="box-element ">
+                <h3 class="font-weight-light">Categories</h3>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/{{ user }}/store/#product"> All Category</a>
+                <!--                <div class="dropdown-divider"></div>-->
+                {% for category in categories %}
+                <a class="dropdown-item"
+                   href="/{{ user }}/store/?category_id={{ category.id }}#product">
+                    <div class="category-content d-flex flex-column">
+                        {{ category.name | safe }}
+                        <!--                        ({{ p.category.product_set.count }})-->
+                    </div>
+                </a>
+                <style>
+                    .category-content {
+                        word-wrap: break-word;
+                    }
+                    .d-flex {
+                        display: -ms-flexbox!important;
+                        display: flex!important;
+                    }
+                    .flex-column {
+                        -ms-flex-direction: column!important;
+                        flex-direction: column!important;
+                    }
+
+                </style>
+                <!--                white-space: pre-line;-->
+                <!--                <div class="dropdown-divider"></div>-->
+                {% endfor %}
+                <br>
+            </div>
+<!--            {% for p in categories %}-->
+<!--&lt;!&ndash;            <small>Set category in the morning. Dev dont forget!!</small>&ndash;&gt;-->
+
+<!--            <li>{{ p.product_set }}</li>-->
+
+
+<!--            {% endfor %}-->
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-md-9 p-2">
+        <div class="box-element p-2">
+            <div class="order-lg-3">
+                <div class="cart-row">
+                    <strong>
+                        {{ products|length }} products found
+                    </strong>
+                    <div style="flex:2">
+                        <div class="form-inline float-right">
+                            <div style="flex:2">
+                                {% if request.user.is_authenticated %}
+                                {% if request.user in user.follower.all %}
+                                <a data-href='{{ user.get_follower_api_url }}' style="box-shadow:4px 6px 5px grey"
+                                        class="btn btn-info btn-sm float-right  follow-btn">
+                                    UNFOLLOW VENDOR
+                                </a>
+                                {% else %}
+                                <a data-href='{{ user.get_follower_api_url }}' style="box-shadow:4px 6px 5px grey"
+                                        class="btn btn-info  float-right btn-sm follow-btn">FOLLOW
+                                    VENDOR
+                                </a>
+                                {% endif %}
+                                {% else %}
+                                <button data-toggle="modal" style="box-shadow:4px 6px 5px grey"
+                                        data-target="#follow" class="btn btn-info float-right  btn-sm">
+                                    FOLLOW VENDOR
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="order-lg-3">
+                <div class="cart-row">
+                    <div>
+                        <strong>
+                            Sort By Price:
+                        </strong>
+                    </div>
+                    <div style="flex:2">
+                        <form class="form-inline float-right" method="GET">
+                            <div style="flex:2">
+                                {{ myFilterSet.form }}
+                                <button class="btn btn-secondary btn-sm mb-2" type="submit">FILTER
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% if user.vendor.subscription %}
+            {% if products|length > 0 %}
+            <div class="row p-2">
+                {% for product in products %}
+                <div class="col-lg-3 col-md-4 col-sm-4 col-6">
+                    <style>
+                            .col-6 {
+                                padding: 6px;
+                            }
+
+                    </style>
+                    <a href="{% url 'store-detail' product.id %}">
+                        <img src="{{ product.image.url }}" fill="777" background="#777" color="#777" alt=""
+                             class="thumbnail-product">
+                        <style>
+                            .thumbnail-product{
+                                width: 100%;
+                                height: 200px;
+                                -webkit-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+                                -moz-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+                                box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+                                transition: .3s
+                            }
+                            .thumbnail-product:hover{
+                                width: 100%;
+                                height: 200px;
+                                transform: translateY(-6px);
+                                box-shadow:hsl(0, 0%, 80%) 0 0 16px;
+                            }
+
+                        </style>
+                        {% if product.image2 %}
+                        <img class="featured hide-img" src="{{ product.image2.url }}">
+                        <style>
+                                .hide-img{
+                                    display: none
+                                }
+
+
+
+
+                        </style>
+                        {% endif %}
+                    </a>
+
+                    <div class="box product">
+                        <a class="mb-2" href="{% url 'store-detail' product.id %}">
+                            <p style="font-size:14px;" class="text-truncate">
+                                {{ product.name }}
+                            </p>
+                            <div style="display: block;float: left;color: black;">
+                                <h5>
+                                    ₦{{ product.price|floatformat:2 }}
+                                </h5>
+                            </div>
+                        </a>
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+                        {% if request.user.is_authenticated %}
+                        <div>
+                            <br>
+                            <svg data-product="{{ product.id }}" style="cursor: pointer" data-toggle="tooltip"
+                                 title="Add To Wishlist!" id="Play_Button" data-placement="right" role="button"
+                                 width="1em" height="1em" viewBox="0 0 16 16" data-href='{{ product.get_api_like_url }}'
+                                 class="bi like-btn float-right bi-heart-fill mt-1 heart call"
+                                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                            </svg>
+                        </div>
+                        {% else %}
+                        <div>
+                            <br>
+                            <a href="{{ product.get_add_product_url }}">
+                                <svg data-product="{{ product.id }}" style="cursor: pointer" data-toggle="tooltip"
+                                     title="Add To Wishlist!" id="Play_Button" data-placement="right" role="button"
+                                     width="1em" height="1em" viewBox="0 0 16 16"
+                                     class="bi float-right bi-heart-fill mt-1 heart call"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <!--                        <div class="heart" title="You are not logged in" data-toggle="tooltip"-->
+                        <!--                             data-placement="right">-->
+                        <!--                            <br>-->
+                        <!--                            <svg data-product="{{ product.id }}"-->
+                        <!--                                 style="background-shadow: 4px 6px 5px grey;cursor: pointer"-->
+                        <!--                                 data-action="add" width="1em" height="1em" viewBox="0 0 16 16"-->
+                        <!--                                 class="bi add-btn heart float-right mt-1 update-cart bi-heart-fill" data-toggle="modal"-->
+                        <!--                                 data-target="#wishlistFunc"-->
+                        <!--                                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">-->
+                        <!--                                <path fill-rule="evenodd"-->
+                        <!--                                      d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>-->
+                        <!--                            </svg>-->
+                        <!--                        </div>-->
+                        <!--                        <div class="modal fade" id="wishlistFunc" tabindex="-1" aria-labelledby="exampleModalLabel"-->
+                        <!--                             aria-hidden="true">-->
+                        <!--                            <div class="modal-dialog modal-dialog-centered" role="document">-->
+                        <!--                                <div class="modal-content" style="background-color: #f6f9fc !important">-->
+                        <!--                                    <div class="modal-body p-3" align="center">-->
+                        <!--                                        <br>-->
+                        <!--                                        <br>-->
+                        <!--                                        <svg xmlns="http://www.w3.org/2000/svg" width="3rem" height="3rem"-->
+                        <!--                                             fill="currentColor"-->
+                        <!--                                             class="bi bi-person-plus" viewBox="0 0 16 16">-->
+                        <!--                                            <path fill-rule="evenodd"-->
+                        <!--                                                  d="M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10zM13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>-->
+                        <!--                                        </svg>-->
+                        <!--                                        <br>-->
+                        <!--                                        <br>-->
+                        <!--                                        <h4>You have to login to update your Wishlist</h4>-->
+                        <!--                                        <br><br>-->
+                        <!--                                        <button type="button" class="btn btn-info btn-block rounded-pill"-->
+                        <!--                                                data-dismiss="modal">Ok, I understand-->
+                        <!--                                        </button>-->
+                        <!--                                        <br><br>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if products.has_other_pages %}
+            <div class="container mt-2" align="center">
+                {% if products.has_previous %}
+                <a class="btn-sm btn btn-outline-info mb-7" href="?page=1">&laquo; First Page</a>
+                <a class="btn-sm btn btn-outline-info mb-7" href="?page={{ products.previous_page_number }}#shop">&laquo;
+                    Previous
+                </a>
+                {% endif %}
+                {% for num in products.paginator.page_range %}
+                {% if products.number == num %}
+                <a class="btn-sm btn btn-info mb-7" href="?page={{ num }}#shop">{{ num }}</a>
+                {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                <a class="btn-sm btn btn-outline-info mb-7" href="?page={{ num }}#shop">{{ num }}</a>
+                {% endif %}
+                {% endfor %}
+                {% if products.has_next %}
+                <a class="btn-sm btn btn-outline-info mb-7" href="?page={{ products.next_page_number }}#shop">Next
+                    &raquo;</a>
+                <a class="btn-sm btn btn-outline-info mb-7" href="?page={{ products.paginator.num_pages }}#shop">Last
+                    Page
+                    &raquo;</a>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="container" id="product" align="center" style="opacity: 0.7" fill="#000">
+                <img class="img-fluid" src="{% static 'images/product-icon-png-19.jpg' %}" style="opacity: 0.8" alt="">
+                <h3 class="font-weight-strong">vendor has no product here!</h3><br>
+            </div>
+            {% endif %}
+            {% else %}
+            <h3 class="font-weight-light">{{ user }} has no products here! Subscribe to become a vendor in
+                minutes</h3>
+            <br>
+            {% if user == request.user %}
+            <a href="{% url 'subscription' %}" class="btn btn-info btn-block">SUBSCRIBE NOW
+                <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-arrow-right" fill="currentColor"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                </svg>
+            </a>
+            {% endif %}
+            {% endif %}
+            <br>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
