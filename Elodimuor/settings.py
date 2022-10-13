@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from decouple import config
+# from decouple import config
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SK")
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -149,22 +149,21 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
 
-STRIPE_TEST_SECRET_KEY = config("STRIPE_TEST_SECRET_KEY")
-STRIPE_TEST_PUBLIC_KEY = config("STRIPE_TEST_PUBLIC_KEY")
-STRIPE_PLAN_MONTHLY_STANDARD_ID = config("STRIPE_PLAN_MONTHLY_STANDARD_ID")
-# STRIPE_PLAN_ANNUAL_ID = 'price_1Hd3LYJtgpXkYafZPKRE8Ap2'
-STRIPE_WEBHOOK_SIGNING_KEY = config("STRIPE_WEBHOOK_SIGNING_KEY")
+STRIPE_TEST_SECRET_KEY = os.environ.get("STRIPE_TEST_SECRET_KEY")
+STRIPE_TEST_PUBLIC_KEY = os.environ.get("STRIPE_TEST_PUBLIC_KEY")
+STRIPE_PLAN_MONTHLY_STANDARD_ID = os.environ.get("STRIPE_PLAN_MONTHLY_STANDARD_ID")
+STRIPE_WEBHOOK_SIGNING_KEY = os.environ.get("STRIPE_WEBHOOK_SIGNING_KEY")
 
-STRIPE_PLAN_MONTHLY_PREMIUM_ID = config("STRIPE_PLAN_MONTHLY_PREMIUM_ID")
-STRIPE_PLAN_MONTHLY_ENTERPRISE_ID = config("STRIPE_PLAN_MONTHLY_ENTERPRISE_ID")
+STRIPE_PLAN_MONTHLY_PREMIUM_ID = os.environ.get("STRIPE_PLAN_MONTHLY_PREMIUM_ID")
+STRIPE_PLAN_MONTHLY_ENTERPRISE_ID = os.environ.get("STRIPE_PLAN_MONTHLY_ENTERPRISE_ID")
 
 STRIPE_LIVE_MODE = False  # Change to True in production
-DJSTRIPE_WEBHOOK_SECRET = config("DJSTRIPE_WEBHOOK_SECRET")
+DJSTRIPE_WEBHOOK_SECRET = os.environ.get("DJSTRIPE_WEBHOOK_SECRET")
 
-MAILCHIMP_API_KEY = config("MAILCHIMP_API_KEY")
-MAILCHIMP_DATA_CENTER = config("MAILCHIMP_DATA_CENTER")
+MAILCHIMP_API_KEY = os.environ.get("MAILCHIMP_API_KEY")
+MAILCHIMP_DATA_CENTER = os.environ.get("MAILCHIMP_DATA_CENTER")
 MAILCHIMP_EMAIL_LIST_ID = os.environ.get('MAILCHIMP_EMAIL_LIST_ID')
 

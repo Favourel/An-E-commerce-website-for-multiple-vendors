@@ -319,24 +319,6 @@ class UserProductView(View):
             # return HttpResponseRedirect(self.request.META.get('HTTP_REFERER'))
 
 
-def max_num(num1, num2, num3):
-    if num1 >= num2 and num1 >= num3:
-        return num1
-    elif num2 >= num1 and num2 >= num3:
-        return num2
-    else:
-        return num3
-
-
-print(max_num(3, 47, 5))
-numbers = [2, 5, 6, 3, 1]
-max = numbers[0]
-for number in numbers:
-    if number > max:
-        max = number
-print(max)
-
-
 @login_required
 def user_followers_product(request):
     if request.user.user_following_list.all().exists():
@@ -998,20 +980,6 @@ class ProductFollowApi(APIView):
             'follow': following,
         }
         return Response(data)
-
-
-# def follow(request, username):
-#     main_user = request.user
-#     to_follow = User.objects.get(username)
-#     following = Following.objects.filter(current_user=main_user, user_followed=to_follow)
-#     is_following = True if following else False
-#
-#     if is_following:
-#         following.unfollow(main_user, to_follow)
-#         is_following = False
-#     else:
-#         following.follow(main_user, to_follow)
-#         is_following = True
 
 
 def get_all_logged_in_users():
